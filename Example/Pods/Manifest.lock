@@ -1,0 +1,16 @@
+PODS:
+  - TFIntentions (0.0.1):
+    - TFIntentions/UITableView
+  - TFIntentions/UITableView (0.0.1)
+
+DEPENDENCIES:
+  - TFIntentions (from `../`)
+
+EXTERNAL SOURCES:
+  TFIntentions:
+    :path: ../
+
+SPEC CHECKSUMS:
+  TFIntentions: dbc0899b943024c1af323891624bb44194d99f2c
+
+COCOAPODS: 0.33.1

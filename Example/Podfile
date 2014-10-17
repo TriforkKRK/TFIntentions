@@ -1,0 +1,11 @@
+
+
+target 'TFIntentions', :exclusive => true do
+  pod "TFIntentions", :path => "../"
+end
+
+target 'Tests', :exclusive => true do
+  pod "TFIntentions", :path => "../"
+
+  
+end
