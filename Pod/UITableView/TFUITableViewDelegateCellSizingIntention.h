@@ -21,7 +21,6 @@
  * THE SOFTWARE.
  */
 
-#import <Foundation/Foundation.h>
 #import "TFIntention.h"
 
 @protocol TFUITableViewCellConfiguring <NSObject>

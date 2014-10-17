@@ -21,24 +21,13 @@
  * THE SOFTWARE.
  */
 
-@import Foundation;
+#import "TFIntention.h"
 
-@interface TFOwnerableObject : NSObject
+@interface TFObserveIntention : NSObject
 
-// Object that this object lifetime will be bound to
-@property(nonatomic, weak) IBOutlet id owner;
-
-+ (void)bindLifetimeOfObject:(id)object toObject:(id)owner;
-
-@end
-
-
-@interface NSObject(tf_owned)
-
-- (id)tf_currentOwner;
-- (void)tf_setCurrentOwner:(id)owner;                  /**< only sets the value */
-
-- (void)tf_bindLifetimeToObject:(id)object;
-- (void)tf_releaseLifetimeFromObject:(id)object;
+@property (strong, nonatomic) IBOutlet id sourceObject;
+@property (strong, nonatomic) IBOutlet id target;
+@property (copy, nonatomic) IBInspectable NSString *sourceKeyPath;
+@property (copy, nonatomic) IBInspectable NSString *targetKeyPath;
 
 @end

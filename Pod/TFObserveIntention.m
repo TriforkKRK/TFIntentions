@@ -21,24 +21,34 @@
  * THE SOFTWARE.
  */
 
-@import Foundation;
+#import "TFObserveIntention.h"
 
-@interface TFOwnerableObject : NSObject
-
-// Object that this object lifetime will be bound to
-@property(nonatomic, weak) IBOutlet id owner;
-
-+ (void)bindLifetimeOfObject:(id)object toObject:(id)owner;
-
+@interface TFObserveIntention ()
 @end
 
+@implementation TFObserveIntention
 
-@interface NSObject(tf_owned)
+- (void)awakeFromNib
+{
+    [super awakeFromNib];
+    
+    [self updateValue];
+    [self.sourceObject addObserver:self forKeyPath:self.sourceKeyPath options:0 context:nil];
+}
 
-- (id)tf_currentOwner;
-- (void)tf_setCurrentOwner:(id)owner;                  /**< only sets the value */
+- (void)updateValue
+{
+    id value = [self.sourceObject valueForKeyPath:self.sourceKeyPath];
+    if (self.targetKeyPath) {
+        [self.target setValue:value forKeyPath:self.targetKeyPath];
+    }
+}
 
-- (void)tf_bindLifetimeToObject:(id)object;
-- (void)tf_releaseLifetimeFromObject:(id)object;
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+{
+    if ([keyPath isEqualToString:self.sourceKeyPath]) {
+        [self updateValue];
+    }
+}
 
 @end
