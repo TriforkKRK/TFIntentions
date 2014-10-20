@@ -51,4 +51,8 @@
     }
 }
 
+- (void)dealloc
+{
+    [_sourceObject removeObserver:self forKeyPath:_sourceKeyPath context:nil];
+}
 @end
