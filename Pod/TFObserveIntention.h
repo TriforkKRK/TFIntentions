@@ -23,7 +23,7 @@
 
 #import "TFIntention.h"
 
-@interface TFObserveIntention : NSObject
+@interface TFObserveIntention : TFIntention
 
 @property (strong, nonatomic) IBOutlet id sourceObject;
 @property (strong, nonatomic) IBOutlet id target;
