@@ -23,6 +23,10 @@
 
 @import Foundation;
 
+//
+// Setting up object owner manually has to be made when object is put into xib file because top level objects are not retained by default
+// When using storyboards on the other hand you don't need this - top level object livetimes seem to be in sync with scene vc.
+//
 @interface TFOwnerableObject : NSObject
 
 // Object that this object lifetime will be bound to
