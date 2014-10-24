@@ -23,6 +23,10 @@
 
 #import "TFIntention.h"
 
+/**
+ *  Observe that updates target objects' value stored under "targetKeyPath" with content of sourceObject.sourceKeyPath
+ *  It also sends UIControlEventValueChanged whenever a change is detected
+ */
 IB_DESIGNABLE
 @interface TFObserveIntention : TFIntention
 

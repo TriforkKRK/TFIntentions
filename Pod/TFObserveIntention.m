@@ -42,7 +42,7 @@
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
     if ([keyPath isEqualToString:self.sourceKeyPath]) {
-        [self updateValue];
+        [self handleValueChanged];
     }
 }
 
@@ -102,16 +102,18 @@
 
 - (void)setup
 {
-    [self updateValue];
+    [self handleValueChanged];
     [self.sourceObject addObserver:self forKeyPath:self.sourceKeyPath options:0 context:nil];
 }
 
-- (void)updateValue
+- (void)handleValueChanged
 {
     id value = [self.sourceObject valueForKeyPath:self.sourceKeyPath];
     if (self.targetKeyPath) {
         [self.target setValue:value forKeyPath:self.targetKeyPath];
     }
+    
+    [self sendActionsForControlEvents:UIControlEventValueChanged];
 }
 
 @end

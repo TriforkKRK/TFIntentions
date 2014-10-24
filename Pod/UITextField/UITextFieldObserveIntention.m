@@ -46,18 +46,15 @@
                                                object:self.sourceObject];
 }
 
-- (void)updateValue:(id)value
-{
-    if (self.targetKeyPath) {
-        [self.target setValue:value forKeyPath:self.targetKeyPath];
-    }
-}
-
 #pragma mark - Notifications
 
 - (void)textFieldDidChangeText:(id)sender
 {
-    [self updateValue:self.sourceObject.text];
+    if (self.targetKeyPath) {
+        [self.target setValue:self.sourceObject.text forKeyPath:self.targetKeyPath];
+    }
+    
+    [self sendActionsForControlEvents:UIControlEventValueChanged];
 }
 
 @end
