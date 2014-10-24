@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6245" systemVersion="14A388b" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BYZ-38-t0r">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+    </dependencies>
+    <scenes>
+        <!--View Controller-->
+        <scene sceneID="tne-QT-ifu">
+            <objects>
+                <viewController id="BYZ-38-t0r" customClass="TFViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
+                        <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="HTf-5R-qQj">
+                                <rect key="frame" x="383" y="50" width="146" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="146" id="BLZ-uN-pG4"/>
+                                    <constraint firstAttribute="height" constant="30" id="TH2-8P-ejk"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RtU-VA-N6J">
+                                <rect key="frame" x="383" y="106" width="146" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Enter test into the textField:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LjM-wu-yEf">
+                                <rect key="frame" x="25" y="54" width="212" height="21"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="21" id="DVY-3J-imG"/>
+                                    <constraint firstAttribute="width" constant="212" id="rSp-9z-cyd"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="TextFieldObserve copies all changes into this label:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cPn-VE-461">
+                                <rect key="frame" x="25" y="106" width="330" height="21"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="21" id="Yg3-uz-1j6"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="TFObserveIntention copies the value from previous label to tis one:" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2nd-8h-Tk5">
+                                <rect key="frame" x="25" y="166" width="358" height="38"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="38" id="ltY-jy-wYr"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="S3K-7E-DTa">
+                                <rect key="frame" x="383" y="174" width="42" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="2nd-8h-Tk5" firstAttribute="leading" secondItem="cPn-VE-461" secondAttribute="leading" id="3jh-rH-XU6"/>
+                            <constraint firstItem="2nd-8h-Tk5" firstAttribute="leading" secondItem="LjM-wu-yEf" secondAttribute="leading" id="Amg-ez-EBd"/>
+                            <constraint firstItem="2nd-8h-Tk5" firstAttribute="top" secondItem="S3K-7E-DTa" secondAttribute="top" constant="-8" id="Drx-tQ-2lF"/>
+                            <constraint firstItem="2nd-8h-Tk5" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="9" id="E2K-0o-V8q"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="HTf-5R-qQj" secondAttribute="trailing" constant="55" id="FCW-wC-yIF"/>
+                            <constraint firstItem="HTf-5R-qQj" firstAttribute="leading" secondItem="S3K-7E-DTa" secondAttribute="leading" id="HKy-1I-vHW"/>
+                            <constraint firstItem="2nd-8h-Tk5" firstAttribute="top" secondItem="cPn-VE-461" secondAttribute="bottom" constant="39" id="IHC-OU-P6o"/>
+                            <constraint firstItem="cPn-VE-461" firstAttribute="baseline" secondItem="RtU-VA-N6J" secondAttribute="baseline" constant="1" id="K2X-gY-ila"/>
+                            <constraint firstItem="cPn-VE-461" firstAttribute="top" secondItem="LjM-wu-yEf" secondAttribute="bottom" constant="31" id="MQN-uf-MVu"/>
+                            <constraint firstItem="HTf-5R-qQj" firstAttribute="trailing" secondItem="RtU-VA-N6J" secondAttribute="trailing" id="SFL-ud-l6n"/>
+                            <constraint firstItem="LjM-wu-yEf" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="34" id="ZOC-Q9-BVx"/>
+                            <constraint firstItem="HTf-5R-qQj" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="30" id="bic-yJ-Twl"/>
+                            <constraint firstItem="RtU-VA-N6J" firstAttribute="top" secondItem="HTf-5R-qQj" secondAttribute="bottom" constant="26" id="kqd-GB-kGv"/>
+                            <constraint firstItem="HTf-5R-qQj" firstAttribute="leading" secondItem="RtU-VA-N6J" secondAttribute="leading" id="lfg-Ca-WqD"/>
+                            <constraint firstItem="S3K-7E-DTa" firstAttribute="leading" secondItem="2nd-8h-Tk5" secondAttribute="trailing" id="loq-YC-BVd"/>
+                            <constraint firstItem="S3K-7E-DTa" firstAttribute="top" secondItem="RtU-VA-N6J" secondAttribute="bottom" constant="47" id="sjC-h4-qHz"/>
+                        </constraints>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+                <customObject id="WwE-vC-USo" customClass="UITextFieldObserveIntention">
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="string" keyPath="targetKeyPath" value="text"/>
+                    </userDefinedRuntimeAttributes>
+                    <connections>
+                        <outlet property="sourceObject" destination="HTf-5R-qQj" id="oQt-Hh-JyW"/>
+                        <outlet property="target" destination="RtU-VA-N6J" id="G9q-Od-2Fw"/>
+                    </connections>
+                </customObject>
+                <customObject id="5Cl-fb-TcT" customClass="TFObserveIntention">
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="string" keyPath="sourceKeyPath" value="text"/>
+                        <userDefinedRuntimeAttribute type="string" keyPath="targetKeyPath" value="text"/>
+                    </userDefinedRuntimeAttributes>
+                    <connections>
+                        <outlet property="sourceObject" destination="RtU-VA-N6J" id="MIo-j1-3e3"/>
+                        <outlet property="target" destination="S3K-7E-DTa" id="uUN-7H-Bd7"/>
+                    </connections>
+                </customObject>
+            </objects>
+        </scene>
+    </scenes>
+</document>

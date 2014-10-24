@@ -18,3 +18,9 @@
 #define COCOAPODS_VERSION_MINOR_TFIntentions_UITableView 0
 #define COCOAPODS_VERSION_PATCH_TFIntentions_UITableView 1
 
+// TFIntentions/UITextField
+#define COCOAPODS_POD_AVAILABLE_TFIntentions_UITextField
+#define COCOAPODS_VERSION_MAJOR_TFIntentions_UITextField 0
+#define COCOAPODS_VERSION_MINOR_TFIntentions_UITextField 0
+#define COCOAPODS_VERSION_PATCH_TFIntentions_UITextField 1
+

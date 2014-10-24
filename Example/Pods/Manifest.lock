@@ -1,7 +1,9 @@
 PODS:
   - TFIntentions (0.0.1):
     - TFIntentions/UITableView
+    - TFIntentions/UITextField
   - TFIntentions/UITableView (0.0.1)
+  - TFIntentions/UITextField (0.0.1)
 
 DEPENDENCIES:
   - TFIntentions (from `../`)
@@ -11,6 +13,6 @@ EXTERNAL SOURCES:
     :path: ../
 
 SPEC CHECKSUMS:
-  TFIntentions: dbc0899b943024c1af323891624bb44194d99f2c
+  TFIntentions: 9d47ece0b4ae29e354e79603d451f88e94fded2f
 
 COCOAPODS: 0.33.1
