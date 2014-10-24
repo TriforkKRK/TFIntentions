@@ -28,4 +28,7 @@ Pod::Spec.new do |s|
   s.subspec 'UITableView' do |sub|
     sub.source_files = 'Pod/UITableView/*.{m,h}'
   end
+  s.subspec 'UITextField' do |sub|
+    sub.source_files = 'Pod/UITextField/*.{m,h}'
+  end
 end
