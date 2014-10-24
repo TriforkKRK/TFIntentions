@@ -25,6 +25,29 @@
 
 @implementation TFTargetMultiplexerIntention
 
+#pragma mark - Interface Properties
+
+- (void)setPolicySetting:(NSString *)policySetting
+{
+    TFTargetMultiplexingPolicy policy = TFTargetMultiplexingPolicyToAll;
+    if ([policySetting isEqualToString:@"ToAll"]) {
+        policy = TFTargetMultiplexingPolicyToAll;
+    }
+    else if ([policySetting isEqualToString:@"ToResponding"]) {
+        policy = TFTargetMultiplexingPolicyToResponding;
+    }
+    else if ([policySetting isEqualToString:@"ToOnlyOne"]) {
+        policy = TFTargetMultiplexingPolicyToOnlyOne;
+    }
+    else {
+        NSAssert1(NO, @"Policy: %@ is not supported", policySetting);
+    }
+    
+    _policy = policy;
+}
+
+#pragma mark - Overriden
+
 - (NSMethodSignature *)methodSignatureForSelector:(SEL)sel
 {
     NSMethodSignature *sig = [super methodSignatureForSelector:sel];
@@ -51,12 +74,47 @@
 
 - (void)forwardInvocation:(NSInvocation *)anInvocation
 {
-    // forwards to all targets that can handle such invocation
-    for (id obj in self.targets) {
-        if ([obj respondsToSelector:anInvocation.selector]) {
-            [anInvocation invokeWithTarget:obj];
-        }
+    BOOL responded = NO;
+    
+    switch (self.policy) {
+        case TFTargetMultiplexingPolicyToAll:
+            for (id obj in self.targets)
+            {
+                NSAssert2([obj respondsToSelector:anInvocation.selector], @"Multiplexing policy is set to <All> but one of the targets: %@ doesn't respond to this selector: %@", obj, NSStringFromSelector(anInvocation.selector));
+                
+                [anInvocation invokeWithTarget:obj];
+                responded = YES;
+            }
+            break;
+        
+        case TFTargetMultiplexingPolicyToResponding:
+            for (id obj in self.targets)
+            {
+                if ([obj respondsToSelector:anInvocation.selector]) {
+                    [anInvocation invokeWithTarget:obj];
+                    responded = YES;
+                }
+            }
+            break;
+            
+        case TFTargetMultiplexingPolicyToOnlyOne:
+
+            for (id obj in self.targets)
+            {
+                if ([obj respondsToSelector:anInvocation.selector]) {
+                    NSAssert1(!responded, @"Multiplexing policy is set to <OnlyOne> whereas more than one target responds to selector: %@", NSStringFromSelector(anInvocation.selector));
+                    
+                    [anInvocation invokeWithTarget:obj];
+                    responded = YES;
+                }
+            }
+            break;
+
+        default:
+            break;
     }
+
+    NSAssert1(responded, @"There was no target that would respond to: %@", NSStringFromSelector(anInvocation.selector));
 }
 
 @end

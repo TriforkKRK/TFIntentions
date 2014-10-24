@@ -23,6 +23,7 @@
 
 #import "TFIntention.h"
 
+IB_DESIGNABLE
 @interface TFObserveIntention : TFIntention
 
 // All the following properties should be set only once

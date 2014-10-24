@@ -23,8 +23,17 @@
 
 #import "TFIntention.h"
 
+typedef NS_ENUM(NSUInteger, TFTargetMultiplexingPolicy) {
+    TFTargetMultiplexingPolicyToAll,
+    TFTargetMultiplexingPolicyToResponding,
+    TFTargetMultiplexingPolicyToOnlyOne,
+};
+
+IB_DESIGNABLE
 @interface TFTargetMultiplexerIntention : TFIntention
 
 @property (nonatomic, strong) IBOutletCollection(id) NSArray *targets;
+@property (nonatomic, assign) TFTargetMultiplexingPolicy policy;
+@property (nonatomic, strong) IBInspectable NSString * policySetting;    /**< It is InterfaceBuilder convenience setter (only writable), one can use: "ToAll", "ToResponding" or "ToOnlyOne" **/
 
 @end

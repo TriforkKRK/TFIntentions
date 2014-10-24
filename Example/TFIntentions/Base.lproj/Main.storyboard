@@ -108,6 +108,11 @@
                         <outlet property="target" destination="S3K-7E-DTa" id="uUN-7H-Bd7"/>
                     </connections>
                 </customObject>
+                <customObject id="xmA-Um-w5Z" customClass="TFTargetMultiplexerIntention">
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="string" keyPath="policySetting" value="aa"/>
+                    </userDefinedRuntimeAttributes>
+                </customObject>
             </objects>
         </scene>
     </scenes>
