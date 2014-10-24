@@ -25,6 +25,7 @@
 
 @interface TFObserveIntention : TFIntention
 
+// All the following properties should be set only once
 @property (strong, nonatomic) IBOutlet id sourceObject;
 @property (strong, nonatomic) IBOutlet id target;
 @property (copy, nonatomic) IBInspectable NSString *sourceKeyPath;

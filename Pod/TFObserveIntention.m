@@ -32,16 +32,11 @@
 {
     [super awakeFromNib];
     
-    [self updateValue];
-    [self.sourceObject addObserver:self forKeyPath:self.sourceKeyPath options:0 context:nil];
-}
-
-- (void)updateValue
-{
-    id value = [self.sourceObject valueForKeyPath:self.sourceKeyPath];
-    if (self.targetKeyPath) {
-        [self.target setValue:value forKeyPath:self.targetKeyPath];
-    }
+    // [self setup];
+    // INFO: Setup code should be handled in awakeFromNib, however there is Apple Bug that causes this method to be called
+    // before any IBOutlet connections are established whenever a backing store is storyboard not xib file:
+    // http://www.openradar.me/18748242
+    //
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
@@ -55,4 +50,68 @@
 {
     [_sourceObject removeObserver:self forKeyPath:_sourceKeyPath context:nil];
 }
+
+// TODO: explicit setters should be removed as soon as http://www.openradar.me/18748242 is fixed
+
+- (void)setSourceObject:(id)sourceObject
+{
+    _sourceObject = sourceObject;
+    
+    // INFO: replaces awakeFromNib call
+    if ([self IBOutletConnectionsEstablished]) {
+        [self setup];
+    }
+}
+
+- (void)setSourceKeyPath:(NSString *)sourceKeyPath
+{
+    _sourceKeyPath = sourceKeyPath;
+    
+    // INFO: replaces awakeFromNib call
+    if ([self IBOutletConnectionsEstablished]) {
+        [self setup];
+    }
+}
+
+- (void)setTarget:(id)target
+{
+    _target = target;
+    
+    // INFO: replaces awakeFromNib call
+    if ([self IBOutletConnectionsEstablished]) {
+        [self setup];
+    }
+}
+
+- (void)setTargetKeyPath:(NSString *)targetKeyPath
+{
+    _targetKeyPath = targetKeyPath;
+    
+    // INFO: replaces awakeFromNib call
+    if ([self IBOutletConnectionsEstablished]) {
+        [self setup];
+    }
+}
+
+#pragma mark - Private
+
+- (BOOL)IBOutletConnectionsEstablished
+{
+    return self.sourceObject != nil && self.sourceKeyPath.length > 0 && self.target && self.targetKeyPath.length > 0;
+}
+
+- (void)setup
+{
+    [self updateValue];
+    [self.sourceObject addObserver:self forKeyPath:self.sourceKeyPath options:0 context:nil];
+}
+
+- (void)updateValue
+{
+    id value = [self.sourceObject valueForKeyPath:self.sourceKeyPath];
+    if (self.targetKeyPath) {
+        [self.target setValue:value forKeyPath:self.targetKeyPath];
+    }
+}
+
 @end
