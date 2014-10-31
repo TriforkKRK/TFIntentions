@@ -49,8 +49,10 @@
 
 - (CGFloat)calculateHeightForConfiguredSizingCell:(UITableViewCell *)sizingCell
 {
-    [sizingCell setNeedsLayout];
-    [sizingCell layoutIfNeeded];
+    // base layout system calculations on a contentView instead of a cell
+    // this makes it independent of what UIKit does with table view cell (e.g. adds standard size constraints 320x44)
+    [sizingCell.contentView setNeedsLayout];
+    [sizingCell.contentView layoutIfNeeded];
     
     CGSize size = [sizingCell.contentView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize];
     return size.height;
@@ -73,12 +75,16 @@
     id sizingCell = self.sizingCells[reuseId];
     if (sizingCell == nil) {
         sizingCell = [self.tableView dequeueReusableCellWithIdentifier:reuseId];
-        [sizingCell addConstraint:[NSLayoutConstraint constraintWithItem:sizingCell attribute:NSLayoutAttributeWidth
-                                                               relatedBy:NSLayoutRelationEqual
-                                                                  toItem:nil
-                                                               attribute:NSLayoutAttributeNotAnAttribute
-                                                              multiplier:1.0
-                                                                constant:self.tableView.bounds.size.width]];
+        // add constraints on the lowest level view possible
+        [((UITableViewCell *)sizingCell).contentView addConstraint:[NSLayoutConstraint constraintWithItem:((UITableViewCell *)sizingCell).contentView
+                                                                                                attribute:NSLayoutAttributeWidth
+                                                                                                relatedBy:NSLayoutRelationEqual
+                                                                                                   toItem:nil
+                                                                                                attribute:NSLayoutAttributeNotAnAttribute
+                                                                                               multiplier:1.0
+                                                                                                 constant:self.tableView.bounds.size.width]];
+        // disregard constraints generated from mask
+        ((UITableViewCell *)sizingCell).contentView.translatesAutoresizingMaskIntoConstraints = NO;
         NSAssert(sizingCell, @"Can' be nil");
         self.sizingCells[reuseId] = sizingCell;
     }

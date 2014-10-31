@@ -37,7 +37,6 @@
         _titleLabel = [[UILabel alloc] init];
         _titleLabel.translatesAutoresizingMaskIntoConstraints = NO;
         _titleLabel.numberOfLines = 0;
-//        _titleLabel.preferredMaxLayoutWidth = 1024;
         [self.contentView addSubview:_titleLabel];
         
         NSDictionary * views = NSDictionaryOfVariableBindings(_titleLabel);
