@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6245" systemVersion="14A388b" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6245" systemVersion="14A389" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BYZ-38-t0r">
     <dependencies>
+        <deployment defaultVersion="1808" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
@@ -66,10 +67,25 @@
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="I88-cK-cdh">
+                                <rect key="frame" x="25" y="317" width="559" height="263"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <connections>
+                                    <outlet property="dataSource" destination="Me4-Jw-lSV" id="VU0-YR-B2X"/>
+                                    <outlet property="delegate" destination="rmS-Mp-MWA" id="aRR-af-sHa"/>
+                                </connections>
+                            </tableView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Cell sizing intention automaticalli calculates cell heights depending on content (iOS 7):" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sIh-D7-drO">
+                                <rect key="frame" x="25" y="255" width="587" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="2nd-8h-Tk5" firstAttribute="leading" secondItem="cPn-VE-461" secondAttribute="leading" id="3jh-rH-XU6"/>
+                            <constraint firstItem="LjM-wu-yEf" firstAttribute="leading" secondItem="I88-cK-cdh" secondAttribute="leading" id="4bl-OI-0pU"/>
                             <constraint firstItem="2nd-8h-Tk5" firstAttribute="leading" secondItem="LjM-wu-yEf" secondAttribute="leading" id="Amg-ez-EBd"/>
                             <constraint firstItem="2nd-8h-Tk5" firstAttribute="top" secondItem="S3K-7E-DTa" secondAttribute="top" constant="-8" id="Drx-tQ-2lF"/>
                             <constraint firstItem="2nd-8h-Tk5" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="9" id="E2K-0o-V8q"/>
@@ -77,14 +93,16 @@
                             <constraint firstItem="HTf-5R-qQj" firstAttribute="leading" secondItem="S3K-7E-DTa" secondAttribute="leading" id="HKy-1I-vHW"/>
                             <constraint firstItem="2nd-8h-Tk5" firstAttribute="top" secondItem="cPn-VE-461" secondAttribute="bottom" constant="39" id="IHC-OU-P6o"/>
                             <constraint firstItem="cPn-VE-461" firstAttribute="baseline" secondItem="RtU-VA-N6J" secondAttribute="baseline" constant="1" id="K2X-gY-ila"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="I88-cK-cdh" secondAttribute="bottom" constant="20" id="KfR-Wp-I8Q"/>
                             <constraint firstItem="cPn-VE-461" firstAttribute="top" secondItem="LjM-wu-yEf" secondAttribute="bottom" constant="31" id="MQN-uf-MVu"/>
                             <constraint firstItem="HTf-5R-qQj" firstAttribute="trailing" secondItem="RtU-VA-N6J" secondAttribute="trailing" id="SFL-ud-l6n"/>
+                            <constraint firstItem="I88-cK-cdh" firstAttribute="top" secondItem="2nd-8h-Tk5" secondAttribute="bottom" constant="113" id="VOI-bT-D0f"/>
                             <constraint firstItem="LjM-wu-yEf" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="34" id="ZOC-Q9-BVx"/>
                             <constraint firstItem="HTf-5R-qQj" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="30" id="bic-yJ-Twl"/>
                             <constraint firstItem="RtU-VA-N6J" firstAttribute="top" secondItem="HTf-5R-qQj" secondAttribute="bottom" constant="26" id="kqd-GB-kGv"/>
                             <constraint firstItem="HTf-5R-qQj" firstAttribute="leading" secondItem="RtU-VA-N6J" secondAttribute="leading" id="lfg-Ca-WqD"/>
                             <constraint firstItem="S3K-7E-DTa" firstAttribute="leading" secondItem="2nd-8h-Tk5" secondAttribute="trailing" id="loq-YC-BVd"/>
-                            <constraint firstItem="S3K-7E-DTa" firstAttribute="top" secondItem="RtU-VA-N6J" secondAttribute="bottom" constant="47" id="sjC-h4-qHz"/>
+                            <constraint firstItem="I88-cK-cdh" firstAttribute="trailing" secondItem="8bC-Xf-vdC" secondAttribute="trailingMargin" id="rbY-Ls-kkD"/>
                         </constraints>
                     </view>
                 </viewController>
@@ -110,10 +128,22 @@
                 </customObject>
                 <customObject id="xmA-Um-w5Z" customClass="TFTargetMultiplexerIntention">
                     <userDefinedRuntimeAttributes>
-                        <userDefinedRuntimeAttribute type="string" keyPath="policySetting" value="aa"/>
+                        <userDefinedRuntimeAttribute type="string" keyPath="policySetting" value="ToAll"/>
                     </userDefinedRuntimeAttributes>
                 </customObject>
+                <customObject id="Me4-Jw-lSV" customClass="TFTableViewDataSource">
+                    <connections>
+                        <outlet property="tableView" destination="I88-cK-cdh" id="5PZ-kN-oFu"/>
+                    </connections>
+                </customObject>
+                <customObject id="rmS-Mp-MWA" customClass="TFUITableViewDelegateCellSizingIntention">
+                    <connections>
+                        <outlet property="tableView" destination="I88-cK-cdh" id="zRP-1a-0xa"/>
+                        <outlet property="tableViewDataSource" destination="Me4-Jw-lSV" id="0gJ-Vh-0IY"/>
+                    </connections>
+                </customObject>
             </objects>
+            <point key="canvasLocation" x="139" y="68"/>
         </scene>
     </scenes>
 </document>

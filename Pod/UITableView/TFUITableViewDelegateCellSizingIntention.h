@@ -26,6 +26,7 @@
 @protocol TFUITableViewCellConfiguring <NSObject>
 
 - (void)configureCell:(id)cell atIndexPath:(NSIndexPath *)indexPath;
+- (NSString *)reuseIdentifierAtIndexPath:(NSIndexPath *)indexPath;
 
 @end
 

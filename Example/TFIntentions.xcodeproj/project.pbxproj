@@ -22,6 +22,8 @@
 		6003F5B2195388D20070C39A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F591195388D20070C39A /* UIKit.framework */; };
 		6003F5BA195388D20070C39A /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6003F5B8195388D20070C39A /* InfoPlist.strings */; };
 		6003F5BC195388D20070C39A /* Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6003F5BB195388D20070C39A /* Tests.m */; };
+		65DE31BB1A0244A1001C8534 /* TFTableViewDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 65DE31BA1A0244A1001C8534 /* TFTableViewDataSource.m */; };
+		65DE31BE1A02452E001C8534 /* TFTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 65DE31BD1A02452E001C8534 /* TFTableViewCell.m */; };
 		AFC1D4FE19FA7391000E7C4A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AFC1D4FC19FA7391000E7C4A /* Main.storyboard */; };
 /* End PBXBuildFile section */
 
@@ -58,6 +60,10 @@
 		6003F5B9195388D20070C39A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		6003F5BB195388D20070C39A /* Tests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Tests.m; sourceTree = "<group>"; };
 		606FC2411953D9B200FFA9A0 /* Tests-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Tests-Prefix.pch"; sourceTree = "<group>"; };
+		65DE31B91A0244A1001C8534 /* TFTableViewDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TFTableViewDataSource.h; sourceTree = "<group>"; };
+		65DE31BA1A0244A1001C8534 /* TFTableViewDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TFTableViewDataSource.m; sourceTree = "<group>"; };
+		65DE31BC1A02452E001C8534 /* TFTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TFTableViewCell.h; sourceTree = "<group>"; };
+		65DE31BD1A02452E001C8534 /* TFTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TFTableViewCell.m; sourceTree = "<group>"; };
 		6E0A8866EF27435AA9D6A3F7 /* Pods-TFIntentions.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TFIntentions.xcconfig"; path = "Pods/Pods-TFIntentions.xcconfig"; sourceTree = "<group>"; };
 		7AB72D2D2D4A4E2BAA1B6D5C /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		8D9F4A9915EC4044BE0ACAF5 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
@@ -129,6 +135,7 @@
 		6003F593195388D20070C39A /* TFIntentions */ = {
 			isa = PBXGroup;
 			children = (
+				65DE31B81A024463001C8534 /* Table View */,
 				6003F59C195388D20070C39A /* TFAppDelegate.h */,
 				6003F59D195388D20070C39A /* TFAppDelegate.m */,
 				6003F5A5195388D20070C39A /* TFViewController.h */,
@@ -178,6 +185,17 @@
 				8D9F4A9915EC4044BE0ACAF5 /* LICENSE */,
 			);
 			name = "Podspec Metadata";
+			sourceTree = "<group>";
+		};
+		65DE31B81A024463001C8534 /* Table View */ = {
+			isa = PBXGroup;
+			children = (
+				65DE31B91A0244A1001C8534 /* TFTableViewDataSource.h */,
+				65DE31BA1A0244A1001C8534 /* TFTableViewDataSource.m */,
+				65DE31BC1A02452E001C8534 /* TFTableViewCell.h */,
+				65DE31BD1A02452E001C8534 /* TFTableViewCell.m */,
+			);
+			name = "Table View";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -346,7 +364,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				6003F59E195388D20070C39A /* TFAppDelegate.m in Sources */,
+				65DE31BE1A02452E001C8534 /* TFTableViewCell.m in Sources */,
 				6003F5A7195388D20070C39A /* TFViewController.m in Sources */,
+				65DE31BB1A0244A1001C8534 /* TFTableViewDataSource.m in Sources */,
 				6003F59A195388D20070C39A /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

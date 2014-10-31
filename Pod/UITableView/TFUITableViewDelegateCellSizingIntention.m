@@ -24,6 +24,7 @@
 #import "TFUITableViewDelegateCellSizingIntention.h"
 
 @interface TFUITableViewDelegateCellSizingIntention()
+@property (nonatomic, strong) NSMutableDictionary * sizingCells;
 @end
 
 @implementation TFUITableViewDelegateCellSizingIntention
@@ -41,12 +42,7 @@
     NSAssert([self.tableViewDataSource conformsToProtocol:@protocol(UITableViewDataSource)], @"dataSource needs to conform to UITableViewDataSource protocol");
     NSAssert([self.tableViewDataSource conformsToProtocol:@protocol(TFUITableViewCellConfiguring)], @"dataSource needs to conform to TFUITableViewCellSizing protocol");
     
-    static id sizingCell = nil;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        sizingCell = [self.tableViewDataSource tableView:self.tableView cellForRowAtIndexPath:indexPath];
-    });
-    
+    id sizingCell = [self sizingCellAtIndexPath:indexPath];
     [self.tableViewDataSource configureCell:sizingCell atIndexPath:indexPath];
     return [self calculateHeightForConfiguredSizingCell:sizingCell];
 }
@@ -59,5 +55,37 @@
     CGSize size = [sizingCell.contentView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize];
     return size.height;
 }
+
+#pragma mark - Private Methods
+
+- (NSMutableDictionary *)sizingCells
+{
+    if (_sizingCells == nil) {
+        _sizingCells = [NSMutableDictionary dictionary];
+    }
+    
+    return _sizingCells;
+}
+
+- (id)sizingCellAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSString * reuseId = [self.tableViewDataSource reuseIdentifierAtIndexPath:indexPath];
+    id sizingCell = self.sizingCells[reuseId];
+    if (sizingCell == nil) {
+        sizingCell = [self.tableView dequeueReusableCellWithIdentifier:reuseId];
+        [sizingCell addConstraint:[NSLayoutConstraint constraintWithItem:sizingCell attribute:NSLayoutAttributeWidth
+                                                               relatedBy:NSLayoutRelationEqual
+                                                                  toItem:nil
+                                                               attribute:NSLayoutAttributeNotAnAttribute
+                                                              multiplier:1.0
+                                                                constant:self.tableView.bounds.size.width]];
+        NSAssert(sizingCell, @"Can' be nil");
+        self.sizingCells[reuseId] = sizingCell;
+    }
+    
+    return sizingCell;
+}
+
+#warning TODO memory warning
 
 @end
