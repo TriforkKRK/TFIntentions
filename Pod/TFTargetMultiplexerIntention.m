@@ -30,7 +30,7 @@
 - (void)setPolicySetting:(NSString *)policySetting
 {
     TFTargetMultiplexingPolicy policy = TFTargetMultiplexingPolicyToAll;
-    if ([policySetting isEqualToString:@"ToAll"]) {
+    if ([policySetting isEqualToString:@"ToAll"] || policySetting.length == 0) {    // default
         policy = TFTargetMultiplexingPolicyToAll;
     }
     else if ([policySetting isEqualToString:@"ToResponding"]) {

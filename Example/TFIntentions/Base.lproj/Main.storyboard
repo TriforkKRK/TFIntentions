@@ -72,7 +72,7 @@
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <connections>
                                     <outlet property="dataSource" destination="Me4-Jw-lSV" id="VU0-YR-B2X"/>
-                                    <outlet property="delegate" destination="rmS-Mp-MWA" id="aRR-af-sHa"/>
+                                    <outlet property="delegate" destination="xmA-Um-w5Z" id="PAL-SO-cpP"/>
                                 </connections>
                             </tableView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Cell sizing intention automaticalli calculates cell heights depending on content (iOS 7):" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sIh-D7-drO">
@@ -127,9 +127,9 @@
                     </connections>
                 </customObject>
                 <customObject id="xmA-Um-w5Z" customClass="TFTargetMultiplexerIntention">
-                    <userDefinedRuntimeAttributes>
-                        <userDefinedRuntimeAttribute type="string" keyPath="policySetting" value="ToAll"/>
-                    </userDefinedRuntimeAttributes>
+                    <connections>
+                        <outletCollection property="targets" destination="rmS-Mp-MWA" id="IRd-96-wxy"/>
+                    </connections>
                 </customObject>
                 <customObject id="Me4-Jw-lSV" customClass="TFTableViewDataSource">
                     <connections>
