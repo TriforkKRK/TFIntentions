@@ -12,6 +12,12 @@
 #define COCOAPODS_VERSION_MINOR_TFIntentions 0
 #define COCOAPODS_VERSION_PATCH_TFIntentions 1
 
+// TFIntentions/NibExternalObjects
+#define COCOAPODS_POD_AVAILABLE_TFIntentions_NibExternalObjects
+#define COCOAPODS_VERSION_MAJOR_TFIntentions_NibExternalObjects 0
+#define COCOAPODS_VERSION_MINOR_TFIntentions_NibExternalObjects 0
+#define COCOAPODS_VERSION_PATCH_TFIntentions_NibExternalObjects 1
+
 // TFIntentions/UITableView
 #define COCOAPODS_POD_AVAILABLE_TFIntentions_UITableView
 #define COCOAPODS_VERSION_MAJOR_TFIntentions_UITableView 0

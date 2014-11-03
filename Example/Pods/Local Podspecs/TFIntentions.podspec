@@ -31,4 +31,7 @@ Pod::Spec.new do |s|
   s.subspec 'UITextField' do |sub|
     sub.source_files = 'Pod/UITextField/*.{m,h}'
   end
+  s.subspec 'NibExternalObjects' do |sub|
+    sub.source_files = 'Pod/NibExternalObjects/*.{m,h}'
+  end
 end

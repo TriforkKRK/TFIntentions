@@ -1,7 +1,9 @@
 PODS:
   - TFIntentions (0.0.1):
+    - TFIntentions/NibExternalObjects
     - TFIntentions/UITableView
     - TFIntentions/UITextField
+  - TFIntentions/NibExternalObjects (0.0.1)
   - TFIntentions/UITableView (0.0.1)
   - TFIntentions/UITextField (0.0.1)
 
@@ -13,6 +15,6 @@ EXTERNAL SOURCES:
     :path: ../
 
 SPEC CHECKSUMS:
-  TFIntentions: 9d47ece0b4ae29e354e79603d451f88e94fded2f
+  TFIntentions: 46ff1bf84fea704fe6b73910dd25d05c9f5f7d02
 
 COCOAPODS: 0.33.1
