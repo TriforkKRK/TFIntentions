@@ -30,6 +30,28 @@
 
 @implementation TFUITableViewDelegateCellSizingIntention
 
+#pragma mark - Overrriden
+
+- (void)awakeFromNib
+{
+    [super awakeFromNib];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didReceiveMemoryWarning) name:UIApplicationDidReceiveMemoryWarningNotification object:nil];
+}
+     
+- (void)didRecieveMemoryWarning
+{
+    _sizingCells = nil;
+    _sizingCellWidthConstraints = nil;
+}
+
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidReceiveMemoryWarningNotification object:nil];
+}
+
+#pragma mark - UITableViewDelegate
+
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     CGFloat separatorHeight = (self.tableView.separatorStyle != UITableViewCellSeparatorStyleNone) ? (1.0f / [[UIScreen mainScreen] scale]) : 0.f;
@@ -37,27 +59,6 @@
     return height;
 }
 
-- (CGFloat)heightForBasicCellAtIndexPath:(NSIndexPath *)indexPath
-{
-    NSAssert(self.tableView, @"TableView can not be nil");
-    NSAssert([self.tableViewDataSource conformsToProtocol:@protocol(UITableViewDataSource)], @"dataSource needs to conform to UITableViewDataSource protocol");
-    NSAssert([self.tableViewDataSource conformsToProtocol:@protocol(TFUITableViewCellConfiguring)], @"dataSource needs to conform to TFUITableViewCellSizing protocol");
-    
-    id sizingCell = [self sizingCellAtIndexPath:indexPath];
-    [self.tableViewDataSource configureCell:sizingCell atIndexPath:indexPath];
-    return [self calculateHeightForConfiguredSizingCell:sizingCell];
-}
-
-- (CGFloat)calculateHeightForConfiguredSizingCell:(UITableViewCell *)sizingCell
-{
-    // base layout system calculations on a contentView instead of a cell
-    // this makes it independent of what UIKit does with table view cell (e.g. adds standard size constraints 320x44)
-    [sizingCell.contentView setNeedsLayout];
-    [sizingCell.contentView layoutIfNeeded];
-    
-    CGSize size = [sizingCell.contentView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize];
-    return size.height;
-}
 
 #pragma mark - Private Properties
 
@@ -77,7 +78,30 @@
     return _sizingCellWidthConstraints;
 }
 
+
 #pragma mark - Private Methods
+
+- (CGFloat)heightForBasicCellAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSAssert(self.tableView, @"TableView can not be nil");
+    NSAssert([self.tableViewDataSource conformsToProtocol:@protocol(UITableViewDataSource)], @"dataSource needs to conform to UITableViewDataSource protocol");
+    NSAssert([self.tableViewDataSource conformsToProtocol:@protocol(TFUITableViewCellConfiguring)], @"dataSource needs to conform to TFUITableViewCellSizing protocol");
+    
+    id sizingCell = [self sizingCellAtIndexPath:indexPath];
+    [self.tableViewDataSource configureCell:sizingCell atIndexPath:indexPath];
+    
+    return [self calculateHeightForConfiguredSizingCell:sizingCell];
+}
+
+- (CGFloat)calculateHeightForConfiguredSizingCell:(UITableViewCell *)sizingCell
+{
+    // base layout system calculations on a contentView instead of a cell
+    // this makes it independent of what UIKit does with table view cell (e.g. adds standard size constraints 320x44)
+    [sizingCell.contentView setNeedsLayout];
+    [sizingCell.contentView layoutIfNeeded];
+    
+    return [sizingCell.contentView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize].height;
+}
 
 - (id)sizingCellAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -108,7 +132,5 @@
     
     return sizingCell;
 }
-
-#warning TODO memory warning
 
 @end
