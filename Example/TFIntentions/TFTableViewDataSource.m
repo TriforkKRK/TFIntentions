@@ -37,8 +37,8 @@ static NSString * const kCellIdentifier = @"cell";
 
 - (void)configureCell:(id)cell atIndexPath:(NSIndexPath *)indexPath
 {
-    NSArray * titles = @[@"Intentions ... lorem ipsum dolor ... lorem ipsum dolor ... lorem ipsum dolor ... lorem ipsum dolor ... lorem ipsum dolor ... lorem ipsum dolor ... 222",
-                         @"\n\n\nbrougth to you by\n",
+    NSArray * titles = @[@"Intentions ... lorem ipsum dolor ... lorem ipsum dolor ... lorem ipsum dolor ... lorem ipsum dolor ... lorem ipsum dolor ... lorem ipsum dolor ... 222 lorem ipsum dolor ... lorem ipsum dolor dolor dolor ...  ",
+                         @"brougth to you by",
                          @"Krzysztof Profic"
                          ];
     
