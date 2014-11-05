@@ -16,7 +16,7 @@
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="uJT-g3-lBe">
-                    <rect key="frame" x="0.0" y="69" width="600" height="531"/>
+                    <rect key="frame" x="8" y="69" width="592" height="531"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <connections>
                         <outlet property="dataSource" destination="4EU-Yg-f8Q" id="2Cy-yd-YG1"/>
@@ -42,7 +42,7 @@
             <constraints>
                 <constraint firstAttribute="trailing" secondItem="uJT-g3-lBe" secondAttribute="trailing" id="DTQ-ki-0ej"/>
                 <constraint firstAttribute="trailing" secondItem="IUP-Hy-huI" secondAttribute="trailing" constant="21" id="EHS-aV-Pgc"/>
-                <constraint firstItem="uJT-g3-lBe" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="L02-G6-yJW"/>
+                <constraint firstItem="uJT-g3-lBe" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="8" id="L02-G6-yJW"/>
                 <constraint firstItem="uJT-g3-lBe" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="69" id="ikK-lB-0Ee"/>
                 <constraint firstAttribute="bottom" secondItem="uJT-g3-lBe" secondAttribute="bottom" id="oqW-eR-Sut"/>
                 <constraint firstItem="uJT-g3-lBe" firstAttribute="top" secondItem="IUP-Hy-huI" secondAttribute="bottom" constant="8" symbolic="YES" id="sSP-zA-ZDi"/>

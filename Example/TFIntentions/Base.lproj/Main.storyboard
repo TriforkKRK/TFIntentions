@@ -33,7 +33,7 @@
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Enter test into the textField:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LjM-wu-yEf">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Enter text into the textField:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LjM-wu-yEf">
                                 <rect key="frame" x="25" y="54" width="212" height="21"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="21" id="DVY-3J-imG"/>
@@ -75,13 +75,13 @@
                                     <outlet property="delegate" destination="xmA-Um-w5Z" id="PAL-SO-cpP"/>
                                 </connections>
                             </tableView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Cell sizing intention automaticalli calculates cell heights depending on content (iOS 7):" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sIh-D7-drO">
-                                <rect key="frame" x="25" y="255" width="587" height="21"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Cell sizing intention automaticalli calculates cell heights depending on content (iOS 7):" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sIh-D7-drO">
+                                <rect key="frame" x="25" y="259" width="555" height="17"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FT3-Z5-TZW">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FT3-Z5-TZW">
                                 <rect key="frame" x="25" y="284" width="202" height="30"/>
                                 <state key="normal" title="Open External Object Test &gt;&gt;">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -93,6 +93,7 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="FT3-Z5-TZW" firstAttribute="top" secondItem="sIh-D7-drO" secondAttribute="bottom" constant="8" symbolic="YES" id="04F-Yz-eEm"/>
                             <constraint firstItem="2nd-8h-Tk5" firstAttribute="leading" secondItem="cPn-VE-461" secondAttribute="leading" id="3jh-rH-XU6"/>
                             <constraint firstItem="LjM-wu-yEf" firstAttribute="leading" secondItem="I88-cK-cdh" secondAttribute="leading" id="4bl-OI-0pU"/>
                             <constraint firstItem="2nd-8h-Tk5" firstAttribute="leading" secondItem="LjM-wu-yEf" secondAttribute="leading" id="Amg-ez-EBd"/>
@@ -104,10 +105,13 @@
                             <constraint firstItem="cPn-VE-461" firstAttribute="baseline" secondItem="RtU-VA-N6J" secondAttribute="baseline" constant="1" id="K2X-gY-ila"/>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="I88-cK-cdh" secondAttribute="bottom" constant="20" id="KfR-Wp-I8Q"/>
                             <constraint firstItem="cPn-VE-461" firstAttribute="top" secondItem="LjM-wu-yEf" secondAttribute="bottom" constant="31" id="MQN-uf-MVu"/>
+                            <constraint firstItem="sIh-D7-drO" firstAttribute="leading" secondItem="2nd-8h-Tk5" secondAttribute="leading" id="Nyt-Xp-Eoe"/>
                             <constraint firstItem="HTf-5R-qQj" firstAttribute="trailing" secondItem="RtU-VA-N6J" secondAttribute="trailing" id="SFL-ud-l6n"/>
                             <constraint firstItem="I88-cK-cdh" firstAttribute="top" secondItem="2nd-8h-Tk5" secondAttribute="bottom" constant="113" id="VOI-bT-D0f"/>
                             <constraint firstItem="LjM-wu-yEf" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="34" id="ZOC-Q9-BVx"/>
+                            <constraint firstItem="I88-cK-cdh" firstAttribute="top" secondItem="FT3-Z5-TZW" secondAttribute="bottom" constant="3" id="avF-u8-pjC"/>
                             <constraint firstItem="HTf-5R-qQj" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="30" id="bic-yJ-Twl"/>
+                            <constraint firstItem="FT3-Z5-TZW" firstAttribute="leading" secondItem="2nd-8h-Tk5" secondAttribute="leading" id="fJq-eb-fzj"/>
                             <constraint firstItem="RtU-VA-N6J" firstAttribute="top" secondItem="HTf-5R-qQj" secondAttribute="bottom" constant="26" id="kqd-GB-kGv"/>
                             <constraint firstItem="HTf-5R-qQj" firstAttribute="leading" secondItem="RtU-VA-N6J" secondAttribute="leading" id="lfg-Ca-WqD"/>
                             <constraint firstItem="S3K-7E-DTa" firstAttribute="leading" secondItem="2nd-8h-Tk5" secondAttribute="trailing" id="loq-YC-BVd"/>

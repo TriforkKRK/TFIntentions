@@ -37,9 +37,9 @@ static NSString * const kCellIdentifier = @"cell";
 
 - (void)configureCell:(id)cell atIndexPath:(NSIndexPath *)indexPath
 {
-    NSArray * titles = @[@"Intentions ... lorem ipsum dolor ... lorem ipsum dolor ... lorem ipsum dolor ... lorem ipsum dolor ... lorem ipsum dolor ... lorem ipsum dolor ... 222 lorem ipsum dolor ... lorem ipsum dolor dolor dolor ...  ",
-                         @"brougth to you by",
-                         @"Krzysztof Profic"
+    NSArray * titles = @[@"More than one line of text. It will take 2 or 3 lines depending on screen tableView width... lorem ipsum dolor ... lorem ipsum dolor ... lorem ipsum dolor ... lorem ipsum dolor ... lorem ipsum dolor ... lorem ipsum dolor ... 222 lorem ipsum dolor ... ",
+                         @"One line text",
+                         @"Two lines of text \nbecause there is a explicit newline char"
                          ];
     
     ((TFTableViewCell *) cell).title = titles[indexPath.row];
