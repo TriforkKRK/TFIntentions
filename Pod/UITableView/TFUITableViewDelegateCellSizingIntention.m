@@ -25,6 +25,7 @@
 
 @interface TFUITableViewDelegateCellSizingIntention()
 @property (nonatomic, strong) NSMutableDictionary * sizingCells;
+@property (nonatomic, strong) NSMutableDictionary * sizingCellWidthConstraints;
 @end
 
 @implementation TFUITableViewDelegateCellSizingIntention
@@ -58,16 +59,25 @@
     return size.height;
 }
 
-#pragma mark - Private Methods
+#pragma mark - Private Properties
 
 - (NSMutableDictionary *)sizingCells
 {
     if (_sizingCells == nil) {
         _sizingCells = [NSMutableDictionary dictionary];
     }
-    
     return _sizingCells;
 }
+
+- (NSMutableDictionary *)sizingCellWidthConstraints
+{
+    if (_sizingCellWidthConstraints == nil) {
+        _sizingCellWidthConstraints = [NSMutableDictionary dictionary];
+    }
+    return _sizingCellWidthConstraints;
+}
+
+#pragma mark - Private Methods
 
 - (id)sizingCellAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -75,19 +85,26 @@
     id sizingCell = self.sizingCells[reuseId];
     if (sizingCell == nil) {
         sizingCell = [self.tableView dequeueReusableCellWithIdentifier:reuseId];
-        // add constraints on the lowest level view possible
-        [((UITableViewCell *)sizingCell).contentView addConstraint:[NSLayoutConstraint constraintWithItem:((UITableViewCell *)sizingCell).contentView
-                                                                                                attribute:NSLayoutAttributeWidth
-                                                                                                relatedBy:NSLayoutRelationEqual
-                                                                                                   toItem:nil
-                                                                                                attribute:NSLayoutAttributeNotAnAttribute
-                                                                                               multiplier:1.0
-                                                                                                 constant:self.tableView.bounds.size.width]];
-        // disregard constraints generated from mask
-        ((UITableViewCell *)sizingCell).contentView.translatesAutoresizingMaskIntoConstraints = NO;
-        NSAssert(sizingCell, @"Can' be nil");
+        NSAssert(sizingCell, @"Can't be nil");
         self.sizingCells[reuseId] = sizingCell;
+        
+        NSLayoutConstraint * constraint = [NSLayoutConstraint constraintWithItem:((UITableViewCell *)sizingCell).contentView
+                                                                       attribute:NSLayoutAttributeWidth
+                                                                       relatedBy:NSLayoutRelationEqual
+                                                                          toItem:nil
+                                                                       attribute:NSLayoutAttributeNotAnAttribute
+                                                                      multiplier:1.0
+                                                                        constant:0];
+        
+        UIView * contentView = ((UITableViewCell *)sizingCell).contentView;
+        contentView.translatesAutoresizingMaskIntoConstraints = NO; // disregard constraints generated from mask
+        [contentView addConstraint:constraint]; // add constraints on the lowest level view possible
+        
+        self.sizingCellWidthConstraints[reuseId] = constraint;
     }
+    
+    NSLayoutConstraint * constraint = (NSLayoutConstraint *)self.sizingCellWidthConstraints[reuseId];
+    constraint.constant = self.tableView.bounds.size.width;
     
     return sizingCell;
 }
