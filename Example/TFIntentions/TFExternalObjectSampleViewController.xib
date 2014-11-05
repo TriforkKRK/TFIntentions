@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6245" systemVersion="14A389" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment defaultVersion="1808" identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="TFExternalObjectSampleViewController">
+            <connections>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <subviews>
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="uJT-g3-lBe">
+                    <rect key="frame" x="0.0" y="69" width="600" height="531"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <connections>
+                        <outlet property="dataSource" destination="4EU-Yg-f8Q" id="2Cy-yd-YG1"/>
+                    </connections>
+                </tableView>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IUP-Hy-huI">
+                    <rect key="frame" x="539" y="31" width="40" height="30"/>
+                    <state key="normal" title="Close">
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <connections>
+                        <action selector="closeButtonClicked:" destination="-1" eventType="touchUpInside" id="Vfz-fk-bma"/>
+                    </connections>
+                </button>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="This table view is connected to the dataSource instance from previous vc using nib externalObjects:" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jp8-uY-6d0">
+                    <rect key="frame" x="8" y="22" width="477" height="39"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                    <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                    <nil key="highlightedColor"/>
+                </label>
+            </subviews>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="uJT-g3-lBe" secondAttribute="trailing" id="DTQ-ki-0ej"/>
+                <constraint firstAttribute="trailing" secondItem="IUP-Hy-huI" secondAttribute="trailing" constant="21" id="EHS-aV-Pgc"/>
+                <constraint firstItem="uJT-g3-lBe" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="L02-G6-yJW"/>
+                <constraint firstItem="uJT-g3-lBe" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="69" id="ikK-lB-0Ee"/>
+                <constraint firstAttribute="bottom" secondItem="uJT-g3-lBe" secondAttribute="bottom" id="oqW-eR-Sut"/>
+                <constraint firstItem="uJT-g3-lBe" firstAttribute="top" secondItem="IUP-Hy-huI" secondAttribute="bottom" constant="8" symbolic="YES" id="sSP-zA-ZDi"/>
+            </constraints>
+        </view>
+        <placeholder placeholderIdentifier="externalDataSource" id="4EU-Yg-f8Q" customClass="TFTableViewDataSource">
+            <connections>
+                <outlet property="tableView" destination="uJT-g3-lBe" id="ijo-LM-QVr"/>
+            </connections>
+        </placeholder>
+    </objects>
+</document>

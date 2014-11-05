@@ -22,11 +22,20 @@
  */
 
 #import "TFViewController.h"
+#import "TFExternalObjectSampleViewController.h"
+#import "TFTableViewDataSource.h"
 
 @interface TFViewController ()
+@property (strong, nonatomic) IBOutlet TFTableViewDataSource *dataSource;
 
 @end
 
 @implementation TFViewController
+
+- (IBAction)externalObjectTestClicked:(id)sender {
+    TFExternalObjectSampleViewController * vc = [[TFExternalObjectSampleViewController alloc] initWithDataSource:self.dataSource];
+    
+    [self presentViewController:vc animated:YES completion:nil];
+}
 
 @end

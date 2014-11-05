@@ -24,6 +24,8 @@
 		6003F5BC195388D20070C39A /* Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6003F5BB195388D20070C39A /* Tests.m */; };
 		65DE31BB1A0244A1001C8534 /* TFTableViewDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 65DE31BA1A0244A1001C8534 /* TFTableViewDataSource.m */; };
 		65DE31BE1A02452E001C8534 /* TFTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 65DE31BD1A02452E001C8534 /* TFTableViewCell.m */; };
+		AF7F26E61A0A628D00C266E7 /* TFExternalObjectSampleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AF7F26E41A0A628D00C266E7 /* TFExternalObjectSampleViewController.m */; };
+		AF7F26E71A0A628D00C266E7 /* TFExternalObjectSampleViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = AF7F26E51A0A628D00C266E7 /* TFExternalObjectSampleViewController.xib */; };
 		AFC1D4FE19FA7391000E7C4A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AFC1D4FC19FA7391000E7C4A /* Main.storyboard */; };
 /* End PBXBuildFile section */
 
@@ -68,6 +70,9 @@
 		7AB72D2D2D4A4E2BAA1B6D5C /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		8D9F4A9915EC4044BE0ACAF5 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 		AF021695045245BB900288A1 /* libPods-Tests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Tests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		AF7F26E31A0A628D00C266E7 /* TFExternalObjectSampleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TFExternalObjectSampleViewController.h; sourceTree = "<group>"; };
+		AF7F26E41A0A628D00C266E7 /* TFExternalObjectSampleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TFExternalObjectSampleViewController.m; sourceTree = "<group>"; };
+		AF7F26E51A0A628D00C266E7 /* TFExternalObjectSampleViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TFExternalObjectSampleViewController.xib; sourceTree = "<group>"; };
 		AFC1D4FD19FA7391000E7C4A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -135,6 +140,7 @@
 		6003F593195388D20070C39A /* TFIntentions */ = {
 			isa = PBXGroup;
 			children = (
+				AF7F26E81A0A6BCA00C266E7 /* ExtrernalObjects */,
 				65DE31B81A024463001C8534 /* Table View */,
 				6003F59C195388D20070C39A /* TFAppDelegate.h */,
 				6003F59D195388D20070C39A /* TFAppDelegate.m */,
@@ -196,6 +202,16 @@
 				65DE31BD1A02452E001C8534 /* TFTableViewCell.m */,
 			);
 			name = "Table View";
+			sourceTree = "<group>";
+		};
+		AF7F26E81A0A6BCA00C266E7 /* ExtrernalObjects */ = {
+			isa = PBXGroup;
+			children = (
+				AF7F26E31A0A628D00C266E7 /* TFExternalObjectSampleViewController.h */,
+				AF7F26E41A0A628D00C266E7 /* TFExternalObjectSampleViewController.m */,
+				AF7F26E51A0A628D00C266E7 /* TFExternalObjectSampleViewController.xib */,
+			);
+			name = ExtrernalObjects;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -281,6 +297,7 @@
 			files = (
 				AFC1D4FE19FA7391000E7C4A /* Main.storyboard in Resources */,
 				6003F5A9195388D20070C39A /* Images.xcassets in Resources */,
+				AF7F26E71A0A628D00C266E7 /* TFExternalObjectSampleViewController.xib in Resources */,
 				6003F598195388D20070C39A /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -365,6 +382,7 @@
 			files = (
 				6003F59E195388D20070C39A /* TFAppDelegate.m in Sources */,
 				65DE31BE1A02452E001C8534 /* TFTableViewCell.m in Sources */,
+				AF7F26E61A0A628D00C266E7 /* TFExternalObjectSampleViewController.m in Sources */,
 				6003F5A7195388D20070C39A /* TFViewController.m in Sources */,
 				65DE31BB1A0244A1001C8534 /* TFTableViewDataSource.m in Sources */,
 				6003F59A195388D20070C39A /* main.m in Sources */,

@@ -40,8 +40,8 @@
         [self.contentView addSubview:_titleLabel];
         
         NSDictionary * views = NSDictionaryOfVariableBindings(_titleLabel);
-        [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-10-[_titleLabel]-10-|" options:0 metrics:nil views:views]];
-        [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-20-[_titleLabel]-20-|" options:0 metrics:nil views:views]];
+        [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-1-[_titleLabel]-1-|" options:0 metrics:nil views:views]];
+        [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-1-[_titleLabel]-1-|" options:0 metrics:nil views:views]];
     }
     return self;
 }
