@@ -18,11 +18,11 @@
 #define COCOAPODS_VERSION_MINOR_TFIntentions_NibExternalObjects 0
 #define COCOAPODS_VERSION_PATCH_TFIntentions_NibExternalObjects 1
 
-// TFIntentions/UITableView
-#define COCOAPODS_POD_AVAILABLE_TFIntentions_UITableView
-#define COCOAPODS_VERSION_MAJOR_TFIntentions_UITableView 0
-#define COCOAPODS_VERSION_MINOR_TFIntentions_UITableView 0
-#define COCOAPODS_VERSION_PATCH_TFIntentions_UITableView 1
+// TFIntentions/UITableView+UICollectionView
+#define COCOAPODS_POD_AVAILABLE_TFIntentions_UITableView_UICollectionView
+#define COCOAPODS_VERSION_MAJOR_TFIntentions_UITableView_UICollectionView 0
+#define COCOAPODS_VERSION_MINOR_TFIntentions_UITableView_UICollectionView 0
+#define COCOAPODS_VERSION_PATCH_TFIntentions_UITableView_UICollectionView 1
 
 // TFIntentions/UITextField
 #define COCOAPODS_POD_AVAILABLE_TFIntentions_UITextField

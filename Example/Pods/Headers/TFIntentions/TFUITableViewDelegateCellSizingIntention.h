@@ -1,1 +1,1 @@
-../../../../Pod/UITableView/TFUITableViewDelegateCellSizingIntention.h
+../../../../Pod/UITableView+UICollectionView/TFUITableViewDelegateCellSizingIntention.h

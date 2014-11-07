@@ -6,10 +6,10 @@ PODS:
   - Specta (0.3.0.beta1)
   - TFIntentions (0.0.1):
     - TFIntentions/NibExternalObjects
-    - TFIntentions/UITableView
+    - TFIntentions/UITableView+UICollectionView
     - TFIntentions/UITextField
   - TFIntentions/NibExternalObjects (0.0.1)
-  - TFIntentions/UITableView (0.0.1)
+  - TFIntentions/UITableView+UICollectionView (0.0.1)
   - TFIntentions/UITextField (0.0.1)
 
 DEPENDENCIES:
@@ -30,6 +30,6 @@ SPEC CHECKSUMS:
   OCHamcrest: b464725bbb48d0f1cd9c6f4ec3cb35fe0c4f2b94
   OCMockito: 57b8c4bb54ff3a4a14eb2174f9e57faf9f56efb6
   Specta: 63e8ac8e07db6675c7096d37f77a266a1be4c02d
-  TFIntentions: 46ff1bf84fea704fe6b73910dd25d05c9f5f7d02
+  TFIntentions: fd5c725512c523541c92faaad8eeb4ed50e74de2
 
 COCOAPODS: 0.33.1

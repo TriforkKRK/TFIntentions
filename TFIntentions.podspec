@@ -25,8 +25,8 @@ Pod::Spec.new do |s|
   s.requires_arc     = true
   s.source_files     = 'Pod/*.{h,m}'
   
-  s.subspec 'UITableView' do |sub|
-    sub.source_files = 'Pod/UITableView/*.{m,h}'
+  s.subspec 'UITableView+UICollectionView' do |sub|
+    sub.source_files = 'Pod/UITableView+UICollectionView/*.{m,h}'
   end
   s.subspec 'UITextField' do |sub|
     sub.source_files = 'Pod/UITextField/*.{m,h}'

@@ -33,7 +33,7 @@ NSString * const kTFDataSourceModeMerge; // =  @"merge"
 NSString * const kTFDataSourceModeJoin;  // =  @"join"
 
 IB_DESIGNABLE
-@interface TFUITableViewDataSourceComposite : TFIntention<TFDataSourceComposing>
+@interface TFDataSourceCompositeIntention : TFIntention<TFDataSourceComposing>
 
 @property (strong, nonatomic) IBOutletCollection(id) NSArray * dataSources;
 @property (strong, nonatomic) IBInspectable NSString * mode;    // @see kTFDataSourceModeMerge (default), kTFDataSourceModeJoin

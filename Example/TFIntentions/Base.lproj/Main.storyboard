@@ -149,7 +149,7 @@
                     </connections>
                 </customObject>
                 <customObject id="yv3-Q8-z34" customClass="TFSingleEntryDataSource"/>
-                <customObject id="WqT-QQ-jsF" customClass="TFUITableViewDataSourceComposite">
+                <customObject id="WqT-QQ-jsF" customClass="TFDataSourceCompositeIntention">
                     <connections>
                         <outletCollection property="dataSources" destination="yv3-Q8-z34" id="9Oq-7O-Hmm"/>
                         <outletCollection property="dataSources" destination="Me4-Jw-lSV" id="1Wn-lq-81M"/>

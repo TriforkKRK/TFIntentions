@@ -12,7 +12,7 @@
 #define MOCKITO_SHORTHAND
 #import <OCMockito/OCMockito.h>
 #import <UIKit/UIKit.h>
-#import <TFIntentions/TFUITableViewDataSourceComposite.h>
+#import <TFIntentions/TFDataSourceCompositeIntention.h>
 
 // TODO for loops when checking cells
 
@@ -42,9 +42,9 @@ describe(@"Composite data source", ^{
     
     describe(@"with two data sources", ^{ // first: 0->2 second: 0->1, 1->2
 
-        __block TFUITableViewDataSourceComposite * compositeOfTwoDataSources;
+        __block TFDataSourceCompositeIntention * compositeOfTwoDataSources;
         beforeAll(^{
-            compositeOfTwoDataSources = [[TFUITableViewDataSourceComposite alloc] init];
+            compositeOfTwoDataSources = [[TFDataSourceCompositeIntention alloc] init];
             compositeOfTwoDataSources.dataSources = @[ds1, ds2];
             [given([tableView dataSource]) willReturn:compositeOfTwoDataSources];
         });
@@ -127,9 +127,9 @@ describe(@"Composite data source", ^{
         [given([ds3 tableView:tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:1 inSection:2]]) willReturn:ds3c21];
         [given([ds3 tableView:tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:2 inSection:2]]) willReturn:ds3c22];
         
-        __block TFUITableViewDataSourceComposite * compositeOfThreeDataSources;
+        __block TFDataSourceCompositeIntention * compositeOfThreeDataSources;
         beforeAll(^{
-            compositeOfThreeDataSources = [[TFUITableViewDataSourceComposite alloc] init];
+            compositeOfThreeDataSources = [[TFDataSourceCompositeIntention alloc] init];
             compositeOfThreeDataSources.dataSources = @[ds1, ds2, ds3];
             [given([tableView dataSource]) willReturn:compositeOfThreeDataSources];
         });

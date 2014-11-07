@@ -21,12 +21,12 @@
  * THE SOFTWARE.
  */
 
-#import "TFUITableViewDataSourceComposite.h"
+#import "TFDataSourceCompositeIntention.h"
 
 NSString * const kTFDataSourceModeMerge = @"merge";
 NSString * const kTFDataSourceModeJoin = @"join";
 
-@interface TFUITableViewDataSourceComposite()
+@interface TFDataSourceCompositeIntention()
 @property (nonatomic, strong) NSObject<TFDataSourceComposing> *implementation;
 @end
 
@@ -43,7 +43,7 @@ NSString * const kTFDataSourceModeJoin = @"join";
 #pragma clang push
 #pragma clang diagnostic ignored "-Wprotocol"
 
-@implementation TFUITableViewDataSourceComposite
+@implementation TFDataSourceCompositeIntention
 
 #pragma mark - Interface Methods
 
@@ -143,6 +143,7 @@ NSString * const kTFDataSourceModeJoin = @"join";
     return [self view:tableView cellAtIndexPath:indexPath];
 }
 
+
 #pragma mark - UICollectionViewDataSource
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
@@ -159,6 +160,7 @@ NSString * const kTFDataSourceModeJoin = @"join";
 {
     return [self view:collectionView cellAtIndexPath:indexPath];
 }
+
 
 #pragma mark - Private Methods
 
@@ -234,13 +236,54 @@ NSString * const kTFDataSourceModeJoin = @"join";
 
 @implementation TFCompositeDataSourceJoinSectionsImpl
 
+#pragma mark - UITableViewDataSource
+
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
+    return [self numberOfSectionsInView:tableView];
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    return [self view:tableView numberOfRowsInSection:section];
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return [self view:tableView cellAtIndexPath:indexPath];
+}
+
+
+#pragma mark - UICollectionViewDataSource
+
+- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
+{
+    return [self numberOfSectionsInView:collectionView];
+}
+
+- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
+{
+    return [self view:collectionView numberOfRowsInSection:section];
+}
+
+- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    return [self view:collectionView cellAtIndexPath:indexPath];
+}
+
+
+#pragma mark - Private Methods
+
+- (NSInteger)numberOfSectionsInView:(id)view
+{
     NSInteger numSections = 0;
-    for (id<UITableViewDataSource> ds in self.dataSources) {
+    for (id<UITableViewDataSource, UICollectionViewDataSource> ds in self.dataSources) {
         NSInteger sections = 1;
         if ([ds respondsToSelector:@selector(numberOfSectionsInTableView:)]) {
-            sections = [ds numberOfSectionsInTableView:tableView];
+            sections = [ds numberOfSectionsInTableView:view];
+        }
+        if ([ds respondsToSelector:@selector(numberOfSectionsInCollectionView:)]) {
+            sections = [ds numberOfSectionsInCollectionView:view];
         }
         numSections += sections;
     }
@@ -248,31 +291,38 @@ NSString * const kTFDataSourceModeJoin = @"join";
     return numSections;
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+- (NSInteger)view:(id)view numberOfRowsInSection:(NSInteger)section
 {
     NSInteger previousSections = 0;
-    for (id<UITableViewDataSource> ds in self.dataSources) {
+    for (id<UITableViewDataSource, UICollectionViewDataSource> ds in self.dataSources) {
         NSInteger sections = 1;
-        if ([ds respondsToSelector:@selector(numberOfSectionsInTableView:)]) sections = [ds numberOfSectionsInTableView:tableView];
+        if ([ds respondsToSelector:@selector(numberOfSectionsInTableView:)]) sections = [ds numberOfSectionsInTableView:view];
+        if ([ds respondsToSelector:@selector(numberOfSectionsInCollectionView:)]) sections = [ds numberOfSectionsInCollectionView:view];
         
         if (section >= previousSections + sections)  {
             previousSections += sections;
             continue;
         }
         
-        return [ds tableView:tableView numberOfRowsInSection:section-previousSections];
+        if ([ds conformsToProtocol:@protocol(UITableViewDataSource)]){
+            return [ds tableView:view numberOfRowsInSection:section-previousSections];
+        }
+        if ([ds conformsToProtocol:@protocol(UICollectionViewDataSource)]) {
+            return [ds collectionView:view numberOfItemsInSection:section-previousSections];
+        }
     }
     
     NSAssert(NO, @"Should never happen");
     return 0;
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+- (id)view:(id)view cellAtIndexPath:(NSIndexPath *)indexPath
 {
     NSInteger previousSections = 0;
-    for (id<UITableViewDataSource> ds in self.dataSources) {
+    for (id<UITableViewDataSource, UICollectionViewDataSource> ds in self.dataSources) {
         NSInteger sections = 1;
-        if ([ds respondsToSelector:@selector(numberOfSectionsInTableView:)]) sections = [ds numberOfSectionsInTableView:tableView];
+        if ([ds respondsToSelector:@selector(numberOfSectionsInTableView:)]) sections = [ds numberOfSectionsInTableView:view];
+        if ([ds respondsToSelector:@selector(numberOfSectionsInCollectionView:)]) sections = [ds numberOfSectionsInCollectionView:view];
         
         if (indexPath.section >= previousSections + sections)  {
             previousSections += sections;
@@ -280,11 +330,17 @@ NSString * const kTFDataSourceModeJoin = @"join";
         }
         
         NSIndexPath * shiftedIndexPath = [NSIndexPath indexPathForRow:indexPath.row inSection:indexPath.section-previousSections];
-        return [ds tableView:tableView cellForRowAtIndexPath:shiftedIndexPath];
+        if ([ds conformsToProtocol:@protocol(UITableViewDataSource)]){
+            return [ds tableView:view cellForRowAtIndexPath:shiftedIndexPath];
+        }
+        if ([ds conformsToProtocol:@protocol(UICollectionViewDataSource)]) {
+            return [ds collectionView:view cellForItemAtIndexPath:shiftedIndexPath];
+        }
     }
     
     NSAssert(NO, @"Should never happen");
     return nil;
 }
+
 @end
 
