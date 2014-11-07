@@ -45,8 +45,6 @@ NSString * const kTFDataSourceModeJoin = @"join";
 
 @implementation TFUITableViewDataSourceComposite
 
-// TODO not implemented
-
 #pragma mark - Interface Methods
 
 - (void)setMode:(NSString *)mode
