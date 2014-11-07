@@ -44,7 +44,7 @@ describe(@"Composite data source", ^{
         TFUITableViewDataSourceComposite * compositeDataSource = [[TFUITableViewDataSourceComposite alloc] init];
         compositeDataSource.dataSources = @[ds1, ds2];
         
-        context(@"in default mode ", ^{
+        context(@"in default mode", ^{
             beforeAll(^{
                 compositeDataSource.mode = kTFDataSourceModeMerge;
             });
@@ -73,7 +73,7 @@ describe(@"Composite data source", ^{
             });
         });
 
-        context(@"in join mode ", ^{
+        context(@"in join mode", ^{
             beforeAll(^{
                 compositeDataSource.mode = kTFDataSourceModeJoin;
             });

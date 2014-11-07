@@ -180,5 +180,57 @@ NSString * const kTFDataSourceModeJoin = @"join";
 
 @implementation TFCompositeDataSourceJoinSectionsImpl
 
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    NSInteger numSections = 0;
+    for (id<UITableViewDataSource> ds in self.dataSources) {
+        NSInteger sections = 1;
+        if ([ds respondsToSelector:@selector(numberOfSectionsInTableView:)]) {
+            sections = [ds numberOfSectionsInTableView:tableView];
+        }
+        numSections += sections;
+    }
+    
+    return numSections;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    NSInteger previousSections = 0;
+    for (id<UITableViewDataSource> ds in self.dataSources) {
+        NSInteger sections = 1;
+        if ([ds respondsToSelector:@selector(numberOfSectionsInTableView:)]) sections = [ds numberOfSectionsInTableView:tableView];
+        
+        if (section >= previousSections + sections)  {
+            previousSections += sections;
+            continue;
+        }
+        
+        return [ds tableView:tableView numberOfRowsInSection:section-previousSections];
+    }
+    
+    NSAssert(NO, @"Should never happen");
+    return 0;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSInteger previousSections = 0;
+    for (id<UITableViewDataSource> ds in self.dataSources) {
+        NSInteger sections = 1;
+        if ([ds respondsToSelector:@selector(numberOfSectionsInTableView:)]) sections = [ds numberOfSectionsInTableView:tableView];
+        
+        if (indexPath.section >= previousSections + sections)  {
+            previousSections += sections;
+            continue;
+        }
+        
+        NSIndexPath * shiftedIndexPath = [NSIndexPath indexPathForRow:indexPath.row inSection:indexPath.section-previousSections];
+        return [ds tableView:tableView cellForRowAtIndexPath:shiftedIndexPath];
+    }
+    
+    NSAssert(NO, @"Should never happen");
+    return nil;
+}
 @end
 
