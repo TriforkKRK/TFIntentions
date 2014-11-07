@@ -20,7 +20,7 @@ SpecBegin(TFUITableViewDataSourceComposite);
 describe(@"Composite data source", ^{
     UITableView * tableView = mock([UITableView class]);
     
-    describe(@"with two data sources, first: 0->2 second: 0->1, 1->2", ^{
+    describe(@"with two data sources", ^{ // first: 0->2 second: 0->1, 1->2
     
         id<UITableViewDataSource> ds1 = mockProtocol(@protocol(UITableViewDataSource)); // 1 section, 2 rows
         [given([ds1 numberOfSectionsInTableView:tableView]) willReturn:@1];
@@ -45,13 +45,17 @@ describe(@"Composite data source", ^{
         compositeDataSource.dataSources = @[ds1, ds2];
         
         context(@"in default mode ", ^{
+            beforeAll(^{
+                compositeDataSource.mode = kTFDataSourceModeMerge;
+            });
+            
             it(@"should have number of sections equal to max number of sections", ^{
-                expect([compositeDataSource numberOfSectionsInTableView:tableView]).to.equal(2);
+                expect([compositeDataSource numberOfSectionsInTableView:tableView]).to.equal(MAX([ds1 numberOfSectionsInTableView:tableView], [ds2 numberOfSectionsInTableView:tableView]));
             });
             
             it(@"should sum numberOfRowsInSection together", ^{
-                expect([compositeDataSource tableView:tableView numberOfRowsInSection:0]).to.equal(3);
-                expect([compositeDataSource tableView:tableView numberOfRowsInSection:1]).to.equal(2);
+                expect([compositeDataSource tableView:tableView numberOfRowsInSection:0]).to.equal([ds1 tableView:tableView numberOfRowsInSection:0] + [ds2 tableView:tableView numberOfRowsInSection:0]);
+                expect([compositeDataSource tableView:tableView numberOfRowsInSection:1]).to.equal([ds2 tableView:tableView numberOfRowsInSection:1]);
             });
             
             it(@"should return the very first cells from first dataSource", ^{
@@ -69,30 +73,35 @@ describe(@"Composite data source", ^{
             });
         });
 
-        
-        // before mode
         context(@"in join mode ", ^{
+            beforeAll(^{
+                compositeDataSource.mode = kTFDataSourceModeJoin;
+            });
+            
             it(@"should have number of sections to be a sum of available sections from all underlying data sources", ^{
-                XCTFail();
+                expect([compositeDataSource numberOfSectionsInTableView:tableView]).to.equal([ds1 numberOfSectionsInTableView:tableView] + [ds2 numberOfSectionsInTableView:tableView]);
             });
 
             it(@"has a number of rows in sections that corresponds to the underlying values in child data sources", ^{
-                XCTFail();
+                expect([compositeDataSource tableView:tableView numberOfRowsInSection:0]).to.equal([ds1 tableView:tableView numberOfRowsInSection:0]);
+                expect([compositeDataSource tableView:tableView numberOfRowsInSection:1]).to.equal([ds2 tableView:tableView numberOfRowsInSection:0]);
+                expect([compositeDataSource tableView:tableView numberOfRowsInSection:2]).to.equal([ds2 tableView:tableView numberOfRowsInSection:1]);
             });
             
             it(@"should return for the first section all the cells from first section of the first underlying dataSource", ^{
-                XCTFail();
+                expect([compositeDataSource tableView:tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]]).to.equal([ds1 tableView:tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]]);
+                expect([compositeDataSource tableView:tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:1 inSection:0]]).to.equal([ds1 tableView:tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:1 inSection:0]]);
             });
             
             it(@"should then return cells from first section of the second underlyind data source when asked for cells from section nr 2", ^{
-                XCTFail();
+                expect([compositeDataSource tableView:tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:1]]).to.equal([ds2 tableView:tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]]);
             });
             
             it(@"should finally return cells from second section of the second underlying datasource when asked for cells from section nr 3", ^{
-                XCTFail();
+                expect([compositeDataSource tableView:tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:2]]).to.equal([ds2 tableView:tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:1]]);
+                expect([compositeDataSource tableView:tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:1 inSection:2]]).to.equal([ds2 tableView:tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:1 inSection:1]]);
             });
         });
-        
     });
 });
 

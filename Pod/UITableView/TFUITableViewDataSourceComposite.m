@@ -23,6 +23,9 @@
 
 #import "TFUITableViewDataSourceComposite.h"
 
+NSString * const kTFDataSourceModeMerge = @"merge";
+NSString * const kTFDataSourceModeJoin = @"join";
+
 @interface TFUITableViewDataSourceComposite()
 @property (nonatomic, strong) NSObject<TFDataSourceComposing> *implementation;
 @end
@@ -48,7 +51,7 @@
 
 - (void)setMode:(NSString *)mode
 {
-    NSParameterAssert([mode isEqualToString:@"merge"] || [mode isEqualToString:@"join"]);
+    NSParameterAssert([mode isEqualToString:kTFDataSourceModeMerge] || [mode isEqualToString:kTFDataSourceModeJoin]);
     
     if (mode == _mode) return;
 
@@ -70,7 +73,7 @@
 {
     self = [super init];
     if  (self) {
-        [self setMode:@"merge"];
+        [self setMode:kTFDataSourceModeMerge];
     }
     return self;
 }
@@ -79,7 +82,7 @@
 {
     self = [super initWithCoder:aDecoder];
     if (self) {
-        [self setMode:@"merge"];
+        [self setMode:kTFDataSourceModeMerge];
     }
     return self;
 }
@@ -108,7 +111,7 @@
 
 - (id<TFDataSourceComposing>)createImplementationForMode:(NSString *)mode
 {
-    Class implClass = [mode isEqualToString:@"merge"] ? TFCompositeDataSourceMergeSectionsImpl.class : TFCompositeDataSourceJoinSectionsImpl.class;
+    Class implClass = [mode isEqualToString:kTFDataSourceModeMerge] ? TFCompositeDataSourceMergeSectionsImpl.class : TFCompositeDataSourceJoinSectionsImpl.class;
     
     NSObject<TFDataSourceComposing> * impl = [[implClass alloc] init];
     impl.dataSources = self.dataSources;
