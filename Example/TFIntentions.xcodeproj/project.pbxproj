@@ -24,8 +24,10 @@
 		6003F5BC195388D20070C39A /* Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6003F5BB195388D20070C39A /* Tests.m */; };
 		65DE31BB1A0244A1001C8534 /* TFTableViewDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 65DE31BA1A0244A1001C8534 /* TFTableViewDataSource.m */; };
 		65DE31BE1A02452E001C8534 /* TFTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 65DE31BD1A02452E001C8534 /* TFTableViewCell.m */; };
+		AF7A3BE41A0BBCF40089F782 /* TFSingleEntryDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = AF7A3BE31A0BBCF40089F782 /* TFSingleEntryDataSource.m */; };
 		AF7F26E61A0A628D00C266E7 /* TFExternalObjectSampleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AF7F26E41A0A628D00C266E7 /* TFExternalObjectSampleViewController.m */; };
 		AF7F26E71A0A628D00C266E7 /* TFExternalObjectSampleViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = AF7F26E51A0A628D00C266E7 /* TFExternalObjectSampleViewController.xib */; };
+		AF8F05BE1A0BBFCB008710CC /* TFSimpleDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = AF8F05BD1A0BBFCB008710CC /* TFSimpleDelegate.m */; };
 		AFC1D4FE19FA7391000E7C4A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AFC1D4FC19FA7391000E7C4A /* Main.storyboard */; };
 /* End PBXBuildFile section */
 
@@ -70,9 +72,13 @@
 		7AB72D2D2D4A4E2BAA1B6D5C /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		8D9F4A9915EC4044BE0ACAF5 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 		AF021695045245BB900288A1 /* libPods-Tests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Tests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		AF7A3BE21A0BBCF40089F782 /* TFSingleEntryDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TFSingleEntryDataSource.h; sourceTree = "<group>"; };
+		AF7A3BE31A0BBCF40089F782 /* TFSingleEntryDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TFSingleEntryDataSource.m; sourceTree = "<group>"; };
 		AF7F26E31A0A628D00C266E7 /* TFExternalObjectSampleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TFExternalObjectSampleViewController.h; sourceTree = "<group>"; };
 		AF7F26E41A0A628D00C266E7 /* TFExternalObjectSampleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TFExternalObjectSampleViewController.m; sourceTree = "<group>"; };
 		AF7F26E51A0A628D00C266E7 /* TFExternalObjectSampleViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TFExternalObjectSampleViewController.xib; sourceTree = "<group>"; };
+		AF8F05BC1A0BBFCB008710CC /* TFSimpleDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TFSimpleDelegate.h; sourceTree = "<group>"; };
+		AF8F05BD1A0BBFCB008710CC /* TFSimpleDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TFSimpleDelegate.m; sourceTree = "<group>"; };
 		AFC1D4FD19FA7391000E7C4A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -200,6 +206,10 @@
 				65DE31BA1A0244A1001C8534 /* TFTableViewDataSource.m */,
 				65DE31BC1A02452E001C8534 /* TFTableViewCell.h */,
 				65DE31BD1A02452E001C8534 /* TFTableViewCell.m */,
+				AF7A3BE21A0BBCF40089F782 /* TFSingleEntryDataSource.h */,
+				AF7A3BE31A0BBCF40089F782 /* TFSingleEntryDataSource.m */,
+				AF8F05BC1A0BBFCB008710CC /* TFSimpleDelegate.h */,
+				AF8F05BD1A0BBFCB008710CC /* TFSimpleDelegate.m */,
 			);
 			name = "Table View";
 			sourceTree = "<group>";
@@ -384,7 +394,9 @@
 				65DE31BE1A02452E001C8534 /* TFTableViewCell.m in Sources */,
 				AF7F26E61A0A628D00C266E7 /* TFExternalObjectSampleViewController.m in Sources */,
 				6003F5A7195388D20070C39A /* TFViewController.m in Sources */,
+				AF7A3BE41A0BBCF40089F782 /* TFSingleEntryDataSource.m in Sources */,
 				65DE31BB1A0244A1001C8534 /* TFTableViewDataSource.m in Sources */,
+				AF8F05BE1A0BBFCB008710CC /* TFSimpleDelegate.m in Sources */,
 				6003F59A195388D20070C39A /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

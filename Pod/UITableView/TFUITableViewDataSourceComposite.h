@@ -1,5 +1,5 @@
 /*
- * Created by Krzysztof Profic on 17/10/14.
+ * Created by Krzysztof Profic on 06/11/14.
  * Copyright (c) 2014 Trifork A/S.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,27 +21,19 @@
  * THE SOFTWARE.
  */
 
-#import "TFViewController.h"
-#import "TFExternalObjectSampleViewController.h"
-#import "TFTableViewDataSource.h"
+#import "TFIntention.h"
 
-@interface TFViewController ()
-@property (strong, nonatomic) IBOutlet TFTableViewDataSource *dataSource;
+// TODO CollectionView
 
+@protocol TFDataSourceComposing <UITableViewDataSource>
+@property (strong, nonatomic) NSArray * dataSources;
 @end
 
-@implementation TFViewController
 
-- (IBAction)externalObjectTestClicked:(id)sender {
-    TFExternalObjectSampleViewController * vc = [[TFExternalObjectSampleViewController alloc] initWithDataSource:self.dataSource];
-    
-    [self presentViewController:vc animated:YES completion:nil];
-}
+IB_DESIGNABLE
+@interface TFUITableViewDataSourceComposite : TFIntention<TFDataSourceComposing>
 
-- (void)viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
-
-}
+@property (strong, nonatomic) IBOutletCollection(id) NSArray * dataSources;
+@property (strong, nonatomic) IBInspectable NSString * mode;    // merge (default), join
 
 @end

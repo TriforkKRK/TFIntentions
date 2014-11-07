@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6245" systemVersion="14A389" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BYZ-38-t0r">
     <dependencies>
-        <deployment defaultVersion="1808" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
@@ -71,8 +70,8 @@
                                 <rect key="frame" x="25" y="317" width="727" height="687"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <connections>
-                                    <outlet property="dataSource" destination="Me4-Jw-lSV" id="VU0-YR-B2X"/>
-                                    <outlet property="delegate" destination="xmA-Um-w5Z" id="PAL-SO-cpP"/>
+                                    <outlet property="dataSource" destination="WqT-QQ-jsF" id="SSN-lM-4No"/>
+                                    <outlet property="delegate" destination="eCK-63-v44" id="bAr-db-tck"/>
                                 </connections>
                             </tableView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Cell sizing intention automaticalli calculates cell heights depending on content (iOS 7):" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sIh-D7-drO">
@@ -124,6 +123,7 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+                <customObject id="eCK-63-v44" customClass="TFSimpleDelegate"/>
                 <customObject id="WwE-vC-USo" customClass="UITextFieldObserveIntention">
                     <userDefinedRuntimeAttributes>
                         <userDefinedRuntimeAttribute type="string" keyPath="targetKeyPath" value="text"/>
@@ -143,20 +143,16 @@
                         <outlet property="target" destination="S3K-7E-DTa" id="uUN-7H-Bd7"/>
                     </connections>
                 </customObject>
-                <customObject id="xmA-Um-w5Z" customClass="TFTargetMultiplexerIntention">
-                    <connections>
-                        <outletCollection property="targets" destination="rmS-Mp-MWA" id="IRd-96-wxy"/>
-                    </connections>
-                </customObject>
                 <customObject id="Me4-Jw-lSV" customClass="TFTableViewDataSource">
                     <connections>
                         <outlet property="tableView" destination="I88-cK-cdh" id="5PZ-kN-oFu"/>
                     </connections>
                 </customObject>
-                <customObject id="rmS-Mp-MWA" customClass="TFUITableViewDelegateCellSizingIntention">
+                <customObject id="yv3-Q8-z34" customClass="TFSingleEntryDataSource"/>
+                <customObject id="WqT-QQ-jsF" customClass="TFUITableViewDataSourceComposite">
                     <connections>
-                        <outlet property="tableView" destination="I88-cK-cdh" id="zRP-1a-0xa"/>
-                        <outlet property="tableViewDataSource" destination="Me4-Jw-lSV" id="0gJ-Vh-0IY"/>
+                        <outletCollection property="dataSources" destination="yv3-Q8-z34" id="9Oq-7O-Hmm"/>
+                        <outletCollection property="dataSources" destination="Me4-Jw-lSV" id="1Wn-lq-81M"/>
                     </connections>
                 </customObject>
             </objects>
