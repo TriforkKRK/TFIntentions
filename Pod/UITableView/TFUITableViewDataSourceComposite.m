@@ -124,16 +124,54 @@ NSString * const kTFDataSourceModeJoin = @"join";
 
 #pragma mark - Concrete Implementations
 
-// TODO CollectionView
 @implementation TFCompositeDataSourceMergeSectionsImpl
+
+#pragma mark - UITableViewDataSource
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
+    return [self numberOfSectionsInView:tableView];
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    return [self view:tableView numberOfRowsInSection:section];
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return [self view:tableView cellAtIndexPath:indexPath];
+}
+
+#pragma mark - UICollectionViewDataSource
+
+- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
+{
+    return [self numberOfSectionsInView:collectionView];
+}
+
+- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
+{
+    return [self view:collectionView numberOfRowsInSection:section];
+}
+
+- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    return [self view:collectionView cellAtIndexPath:indexPath];
+}
+
+#pragma mark - Private Methods
+
+- (NSInteger)numberOfSectionsInView:(id)view
+{
     NSInteger maxNumSections = 0;
-    for (id<UITableViewDataSource> ds in self.dataSources) {
+    for (id<UITableViewDataSource, UICollectionViewDataSource> ds in self.dataSources) {
         NSInteger sections = 1;
         if ([ds respondsToSelector:@selector(numberOfSectionsInTableView:)]) {
-            sections = [ds numberOfSectionsInTableView:tableView];
+            sections = [ds numberOfSectionsInTableView:view];
+        }
+        if ([ds respondsToSelector:@selector(numberOfSectionsInCollectionView:)]) {
+            sections = [ds numberOfSectionsInCollectionView:view];
         }
         maxNumSections = MAX(maxNumSections, sections);
     }
@@ -141,29 +179,47 @@ NSString * const kTFDataSourceModeJoin = @"join";
     return maxNumSections;
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+- (NSInteger)view:(id)view numberOfRowsInSection:(NSInteger)section
 {
     NSInteger sum = 0;
-    for (id<UITableViewDataSource> ds in self.dataSources) {
+    for (id<UITableViewDataSource, UICollectionViewDataSource> ds in self.dataSources) {
         NSInteger sections = 1;
-        if ([ds respondsToSelector:@selector(numberOfSectionsInTableView:)]) sections = [ds numberOfSectionsInTableView:tableView];
+        if ([ds respondsToSelector:@selector(numberOfSectionsInTableView:)]) sections = [ds numberOfSectionsInTableView:view];
+        if ([ds respondsToSelector:@selector(numberOfSectionsInCollectionView:)]) sections = [ds numberOfSectionsInCollectionView:view];
         
         if (section >= sections) continue;
         
-        sum += [ds tableView:tableView numberOfRowsInSection:section];
+        if ([ds conformsToProtocol:@protocol(UITableViewDataSource)]) {
+            sum += [ds tableView:view numberOfRowsInSection:section];
+        }
+        if ([ds conformsToProtocol:@protocol(UICollectionViewDataSource)]) {
+            sum += [ds collectionView:view numberOfItemsInSection:section];
+        }
     }
 
     return sum;
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+- (id)view:(id)view cellAtIndexPath:(NSIndexPath *)indexPath
 {
     NSInteger previousObjectsCount = 0;
-    for (id<UITableViewDataSource> ds in self.dataSources) {
-        NSInteger rows = [ds tableView:tableView numberOfRowsInSection:indexPath.section];
+    for (id<UITableViewDataSource, UICollectionViewDataSource> ds in self.dataSources) {
+        NSInteger rows = 0;
+        if ([ds conformsToProtocol:@protocol(UITableViewDataSource)]) {
+            rows = [ds tableView:view numberOfRowsInSection:indexPath.section];
+        }
+        if ([ds conformsToProtocol:@protocol(UICollectionViewDataSource)]) {
+            rows = [ds collectionView:view numberOfItemsInSection:indexPath.section];
+        }
+        
         if (indexPath.row < previousObjectsCount + rows) {
             NSIndexPath * shiftedIndexPath = [NSIndexPath indexPathForRow:indexPath.row-previousObjectsCount inSection:indexPath.section];
-            return [ds tableView:tableView cellForRowAtIndexPath:shiftedIndexPath];
+            if ([ds conformsToProtocol:@protocol(UITableViewDataSource)]) {
+                return [ds tableView:view cellForRowAtIndexPath:shiftedIndexPath];
+            }
+            if ([ds conformsToProtocol:@protocol(UICollectionViewDataSource)]) {
+                return [ds collectionView:view cellForItemAtIndexPath:shiftedIndexPath];
+            }
         }
         
         previousObjectsCount += rows;

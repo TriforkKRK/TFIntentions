@@ -23,9 +23,7 @@
 
 #import "TFIntention.h"
 
-// TODO CollectionView
-
-@protocol TFDataSourceComposing <UITableViewDataSource>
+@protocol TFDataSourceComposing <UITableViewDataSource, UICollectionViewDataSource>
 @property (strong, nonatomic) NSArray * dataSources;
 @end
 
