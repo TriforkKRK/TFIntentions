@@ -14,7 +14,6 @@
 #import <UIKit/UIKit.h>
 #import <TFIntentions/TFDataSourceCompositeIntention.h>
 
-// TODO for loops when checking cells
 
 SpecBegin(TFUITableViewDataSourceComposite);
 
