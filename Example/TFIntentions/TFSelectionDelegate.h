@@ -8,6 +8,6 @@
 
 #import <Foundation/Foundation.h>
 
-@interface TFSimpleDelegate : NSObject<UITableViewDelegate>
+@interface TFSelectionDelegate : NSObject<UITableViewDelegate>
 
 @end

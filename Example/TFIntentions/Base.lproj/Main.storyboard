@@ -72,7 +72,7 @@
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <connections>
                                     <outlet property="dataSource" destination="WqT-QQ-jsF" id="SSN-lM-4No"/>
-                                    <outlet property="delegate" destination="9cN-LO-dig" id="4GF-JM-tzW"/>
+                                    <outlet property="delegate" destination="hM6-uG-6NL" id="77N-v1-zDc"/>
                                 </connections>
                             </tableView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Cell sizing intention automaticalli calculates cell heights depending on content (iOS 7):" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sIh-D7-drO">
@@ -124,7 +124,7 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
-                <customObject id="eCK-63-v44" customClass="TFSimpleDelegate"/>
+                <customObject id="eCK-63-v44" customClass="TFSelectionDelegate"/>
                 <customObject id="WwE-vC-USo" customClass="UITextFieldObserveIntention">
                     <userDefinedRuntimeAttributes>
                         <userDefinedRuntimeAttribute type="string" keyPath="targetKeyPath" value="text"/>
@@ -167,6 +167,15 @@
                     <connections>
                         <outlet property="tableView" destination="I88-cK-cdh" id="WTO-Qd-aeG"/>
                         <outlet property="tableViewDataSource" destination="WqT-QQ-jsF" id="yYF-dL-ehR"/>
+                    </connections>
+                </customObject>
+                <customObject id="hM6-uG-6NL" customClass="TFTargetMultiplexerIntention">
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="string" keyPath="policySetting" value="ToOnlyOne"/>
+                    </userDefinedRuntimeAttributes>
+                    <connections>
+                        <outletCollection property="targets" destination="eCK-63-v44" id="fU4-F0-gq5"/>
+                        <outletCollection property="targets" destination="9cN-LO-dig" id="j5g-PF-pEZ"/>
                     </connections>
                 </customObject>
             </objects>
