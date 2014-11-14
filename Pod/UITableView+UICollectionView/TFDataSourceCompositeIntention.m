@@ -338,7 +338,6 @@ NSString * const kTFDataSourceModeJoin = @"join";
         numSections += sections;
     }
     
-    NSLog(@"[i] sectionsNumber: %ld", numSections);
     return numSections;
 }
 
@@ -362,7 +361,7 @@ NSString * const kTFDataSourceModeJoin = @"join";
         if ([ds conformsToProtocol:@protocol(UICollectionViewDataSource)]) {
             rows = [ds collectionView:view numberOfItemsInSection:section-previousSections];
         }
-        NSLog(@"[i] Rows count: %ld in section: %ld", rows, section);
+
         return rows;
     }
     

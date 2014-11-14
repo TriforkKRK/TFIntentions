@@ -45,7 +45,7 @@ IB_DESIGNABLE
 @property (strong, nonatomic) IBInspectable NSString * mode;    // @see kTFDataSourceModeMerge (default), kTFDataSourceModeJoin
 
 /**
- *  This method is supported as long as all underlying @see dataSources implement this method
+ *  This method is supported as long as all underlying @see dataSources also implement it
  *  IMPORTANT: it will pass nil as tableView / collectionView when talking to dataSources
  */
 - (id)itemAtIndexPath:(NSIndexPath *)indexPath;
