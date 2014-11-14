@@ -7,8 +7,18 @@
 //
 
 #import "TFSingleEntryDataSource.h"
+#import "TFTableViewCell.h"
+
+static NSString * const kCellIdentifier = @"kSingleEntryTableViewCell";
 
 @implementation TFSingleEntryDataSource
+
+- (void)setTableView:(UITableView *)tableView
+{
+    [tableView registerClass:[TFTableViewCell class] forCellReuseIdentifier:kCellIdentifier];
+}
+
+#pragma mark - UITableViewDataSource
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
@@ -17,19 +27,27 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell * cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];
+    TFTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:kCellIdentifier];
     [self configureCell:cell atIndexPath:indexPath];
     return cell;
-}
-
-- (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
-{
-    cell.textLabel.text = @"Single entry first cell";
 }
 
 - (NSString *)itemAtIndexPath:(NSIndexPath *)indexPath
 {
     return @"Single entry first cell";
 }
+
+#pragma mark - TFUITableViewCellConfiguring
+
+- (void)configureCell:(id)cell atIndexPath:(NSIndexPath *)indexPath
+{
+    ((TFTableViewCell *) cell).title = [self itemAtIndexPath:indexPath];
+}
+
+- (NSString *)reuseIdentifierAtIndexPath:(NSIndexPath *)indexPath
+{
+    return kCellIdentifier;
+}
+
 
 @end

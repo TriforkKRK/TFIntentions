@@ -11,14 +11,14 @@
 
 @implementation TFTableViewDataSource
 
-static NSString * const kCellIdentifier = @"cell";
-
-#pragma mark - UITableViewDataSource
+static NSString * const kCellIdentifier = @"kTFTableViewCell";
 
 - (void)setTableView:(UITableView *)tableView
 {
     [tableView registerClass:[TFTableViewCell class] forCellReuseIdentifier:kCellIdentifier];
 }
+
+#pragma mark - UITableViewDataSource
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {

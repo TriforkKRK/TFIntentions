@@ -72,7 +72,7 @@
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <connections>
                                     <outlet property="dataSource" destination="WqT-QQ-jsF" id="SSN-lM-4No"/>
-                                    <outlet property="delegate" destination="eCK-63-v44" id="bAr-db-tck"/>
+                                    <outlet property="delegate" destination="9cN-LO-dig" id="4GF-JM-tzW"/>
                                 </connections>
                             </tableView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Cell sizing intention automaticalli calculates cell heights depending on content (iOS 7):" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sIh-D7-drO">
@@ -149,7 +149,11 @@
                         <outlet property="tableView" destination="I88-cK-cdh" id="5PZ-kN-oFu"/>
                     </connections>
                 </customObject>
-                <customObject id="yv3-Q8-z34" customClass="TFSingleEntryDataSource"/>
+                <customObject id="yv3-Q8-z34" customClass="TFSingleEntryDataSource">
+                    <connections>
+                        <outlet property="tableView" destination="I88-cK-cdh" id="fhe-3n-wt0"/>
+                    </connections>
+                </customObject>
                 <customObject id="WqT-QQ-jsF" customClass="TFDataSourceCompositeIntention">
                     <userDefinedRuntimeAttributes>
                         <userDefinedRuntimeAttribute type="string" keyPath="mode" value="merge"/>
@@ -157,6 +161,12 @@
                     <connections>
                         <outletCollection property="dataSources" destination="yv3-Q8-z34" id="9Oq-7O-Hmm"/>
                         <outletCollection property="dataSources" destination="Me4-Jw-lSV" id="1Wn-lq-81M"/>
+                    </connections>
+                </customObject>
+                <customObject id="9cN-LO-dig" customClass="TFUITableViewDelegateCellSizingIntention">
+                    <connections>
+                        <outlet property="tableView" destination="I88-cK-cdh" id="WTO-Qd-aeG"/>
+                        <outlet property="tableViewDataSource" destination="WqT-QQ-jsF" id="yYF-dL-ehR"/>
                     </connections>
                 </customObject>
             </objects>
