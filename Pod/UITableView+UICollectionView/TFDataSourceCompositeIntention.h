@@ -37,8 +37,17 @@ NSString * const kTFDataSourceModeJoin;  // =  @"join"
 IB_DESIGNABLE
 @interface TFDataSourceCompositeIntention : TFIntention<TFDataSourceComposing>
 
+/**
+ * Underlying dataSources must use dequeueReusableCellWithIdentifier:kCellIdentifier instead of dequeueReusableCellWithIdentifier:forIndexPath:
+ * the later one may cause crash as the indexPath passed is sometimes different on the data source comparing to the tableView.
+ */
 @property (strong, nonatomic) IBOutletCollection(id) NSArray * dataSources;
 @property (strong, nonatomic) IBInspectable NSString * mode;    // @see kTFDataSourceModeMerge (default), kTFDataSourceModeJoin
 
-- (id)itemAtIndexPath:(NSIndexPath *)indexPath; // supported as long as all underlying @see dataSources implement this method, it will pass nil as tableView / collectionView when talking to datasources
+/**
+ *  This method is supported as long as all underlying @see dataSources implement this method
+ *  IMPORTANT: it will pass nil as tableView / collectionView when talking to dataSources
+ */
+- (id)itemAtIndexPath:(NSIndexPath *)indexPath;
+
 @end

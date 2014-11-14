@@ -27,7 +27,7 @@ static NSString * const kCellIdentifier = @"cell";
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    TFTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:kCellIdentifier forIndexPath:indexPath];
+    TFTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:kCellIdentifier];
     [self configureCell:cell atIndexPath:indexPath];
     
     return cell;

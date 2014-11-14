@@ -15,7 +15,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     id model = [(TFDataSourceCompositeIntention *)tableView.dataSource itemAtIndexPath:indexPath];
-    NSLog(@"selected %@", model);
+    NSLog(@"selected %@ at IndexPath: %@", model, indexPath);
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath

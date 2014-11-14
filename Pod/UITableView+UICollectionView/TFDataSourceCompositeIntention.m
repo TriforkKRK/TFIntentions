@@ -45,19 +45,6 @@ NSString * const kTFDataSourceModeJoin = @"join";
 
 @implementation TFDataSourceCompositeIntention
 
-- (id)itemAtIndexPath:(NSIndexPath *)indexPath
-{
-    NSIndexPath * outIndexPath = nil;
-    id ds = [self dataSourceAtIndexPath:indexPath view:nil outIndexPath:&outIndexPath];
-    SEL sel = @selector(itemAtIndexPath:);
-    if ([ds respondsToSelector:sel] == NO) {
-        [NSException raise:NSInternalInconsistencyException format:@"Underlying dataSource: %@ doesn't implement %@", ds, NSStringFromSelector(sel)];
-        return nil;
-    }
-    
-    return [ds itemAtIndexPath:outIndexPath];
-}
-
 #pragma mark - Interface Methods
 
 - (void)setMode:(NSString *)mode
@@ -76,6 +63,19 @@ NSString * const kTFDataSourceModeJoin = @"join";
     
     _dataSources = dataSources;
     _implementation.dataSources = dataSources;
+}
+
+- (id)itemAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSIndexPath * outIndexPath = nil;
+    id ds = [self dataSourceAtIndexPath:indexPath view:nil outIndexPath:&outIndexPath];
+    SEL sel = @selector(itemAtIndexPath:);
+    if ([ds respondsToSelector:sel] == NO) {
+        [NSException raise:NSInternalInconsistencyException format:@"Underlying dataSource: %@ doesn't implement %@", ds, NSStringFromSelector(sel)];
+        return nil;
+    }
+    
+    return [ds itemAtIndexPath:outIndexPath];
 }
 
 #pragma mark - Overriden
@@ -118,6 +118,20 @@ NSString * const kTFDataSourceModeJoin = @"join";
     [anInvocation invokeWithTarget:self.implementation];
 }
 
+#pragma mark - Overriden (UITableViewDataSource)
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return [self view:tableView cellAtIndexPath:indexPath];
+}
+
+#pragma mark - Overriden (UICollectionViewDataSource)
+
+- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    return [self view:collectionView cellAtIndexPath:indexPath];
+}
+
 #pragma mark - Private Methods
 
 - (id<TFDataSourceComposing>)createImplementationForMode:(NSString *)mode
@@ -127,6 +141,23 @@ NSString * const kTFDataSourceModeJoin = @"join";
     NSObject<TFDataSourceComposing> * impl = [[implClass alloc] init];
     impl.dataSources = self.dataSources;
     return impl;
+}
+
+- (id)view:(id)view cellAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSIndexPath * shiftedIndexPath = nil;
+    id ds = [self.implementation dataSourceAtIndexPath:indexPath view:view outIndexPath:&shiftedIndexPath];
+    NSAssert(ds != nil && shiftedIndexPath != nil, @"Underlying data source nor indexPath can't be unknown at this point");
+    
+    if ([ds conformsToProtocol:@protocol(UITableViewDataSource)]) {
+        return [ds tableView:view cellForRowAtIndexPath:shiftedIndexPath];
+    }
+    if ([ds conformsToProtocol:@protocol(UICollectionViewDataSource)]) {
+        return [ds collectionView:view cellForItemAtIndexPath:shiftedIndexPath];
+    }
+    
+    NSAssert(NO, @"Data source has to be either UITableViewDataSource or UICollectionViewDataSource");
+    return nil;
 }
 
 @end
@@ -139,10 +170,12 @@ NSString * const kTFDataSourceModeJoin = @"join";
 
 @implementation TFCompositeDataSourceMergeSectionsImpl
 
+#pragma mark TFDataSourceComposing
+
 - (id<UITableViewDataSource, UICollectionViewDataSource>)dataSourceAtIndexPath:(NSIndexPath *)indexPath view:(id)view outIndexPath:(out NSIndexPath *__autoreleasing *)outIndexPath
 {
-#warning TODO
-    // param assert ds protocol + view type
+    NSParameterAssert(view == nil || [view isKindOfClass:UITableView.class] || [view isKindOfClass:UICollectionView.class]);
+    
     NSInteger previousObjectsCount = 0;
     for (id<UITableViewDataSource, UICollectionViewDataSource> ds in self.dataSources) {
         NSInteger rows = 0;
@@ -164,8 +197,7 @@ NSString * const kTFDataSourceModeJoin = @"join";
         previousObjectsCount += rows;
     }
     
-#warning - what about this assertion here?
-    NSAssert(NO, @"Data source not found!!!, this should never happen!");
+    [NSException raise:NSInternalInconsistencyException format:@"Invalid indexPath: %@, can't locate underlying dataSource", indexPath];
     return nil;
 }
 
@@ -181,12 +213,6 @@ NSString * const kTFDataSourceModeJoin = @"join";
     return [self view:tableView numberOfRowsInSection:section];
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return [self view:tableView cellAtIndexPath:indexPath];
-}
-
-
 #pragma mark - UICollectionViewDataSource
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
@@ -198,12 +224,6 @@ NSString * const kTFDataSourceModeJoin = @"join";
 {
     return [self view:collectionView numberOfRowsInSection:section];
 }
-
-- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
-{
-    return [self view:collectionView cellAtIndexPath:indexPath];
-}
-
 
 #pragma mark - Private Methods
 
@@ -245,27 +265,38 @@ NSString * const kTFDataSourceModeJoin = @"join";
     return sum;
 }
 
-- (id)view:(id)view cellAtIndexPath:(NSIndexPath *)indexPath
-{
-    NSIndexPath * shiftedIndexPath = nil;
-    id ds = [self dataSourceAtIndexPath:indexPath view:view outIndexPath:&shiftedIndexPath];
-    NSAssert(ds != nil && shiftedIndexPath != nil, @"Underlying data source nor indexPath can't be unknown at this point");
-    
-    if ([ds conformsToProtocol:@protocol(UITableViewDataSource)]) {
-        return [ds tableView:view cellForRowAtIndexPath:shiftedIndexPath];
-    }
-    if ([ds conformsToProtocol:@protocol(UICollectionViewDataSource)]) {
-        return [ds collectionView:view cellForItemAtIndexPath:shiftedIndexPath];
-    }
-    
-    NSAssert(NO, @"Data source has to be either UITableViewDataSource or UICollectionViewDataSource");
-    return nil;
-}
-
 @end
 
 
 @implementation TFCompositeDataSourceJoinSectionsImpl
+
+#pragma mark TFDataSourceComposing
+
+- (id<UITableViewDataSource, UICollectionViewDataSource>)dataSourceAtIndexPath:(NSIndexPath *)indexPath view:(id)view outIndexPath:(out NSIndexPath *__autoreleasing *)outIndexPath
+{
+    NSParameterAssert(view == nil || [view isKindOfClass:UITableView.class] || [view isKindOfClass:UICollectionView.class]);
+    
+    NSInteger previousSections = 0;
+    for (id<UITableViewDataSource, UICollectionViewDataSource> ds in self.dataSources) {
+        NSInteger sections = 1;
+        if ([ds respondsToSelector:@selector(numberOfSectionsInTableView:)]) sections = [ds numberOfSectionsInTableView:view];
+        if ([ds respondsToSelector:@selector(numberOfSectionsInCollectionView:)]) sections = [ds numberOfSectionsInCollectionView:view];
+        
+        if (indexPath.section >= previousSections + sections)  {
+            previousSections += sections;
+            continue;
+        }
+        
+        NSIndexPath * shiftedIndexPath = [NSIndexPath indexPathForRow:indexPath.row inSection:indexPath.section-previousSections];
+        if (outIndexPath != NULL) {
+            *outIndexPath = shiftedIndexPath;
+        }
+        return ds;
+    }
+    
+    [NSException raise:NSInternalInconsistencyException format:@"Invalid indexPath: %@, can't locate underlying dataSource", indexPath];
+    return nil;
+}
 
 #pragma mark - UITableViewDataSource
 
@@ -279,12 +310,6 @@ NSString * const kTFDataSourceModeJoin = @"join";
     return [self view:tableView numberOfRowsInSection:section];
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return [self view:tableView cellAtIndexPath:indexPath];
-}
-
-
 #pragma mark - UICollectionViewDataSource
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
@@ -296,12 +321,6 @@ NSString * const kTFDataSourceModeJoin = @"join";
 {
     return [self view:collectionView numberOfRowsInSection:section];
 }
-
-- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
-{
-    return [self view:collectionView cellAtIndexPath:indexPath];
-}
-
 
 #pragma mark - Private Methods
 
@@ -319,6 +338,7 @@ NSString * const kTFDataSourceModeJoin = @"join";
         numSections += sections;
     }
     
+    NSLog(@"[i] sectionsNumber: %ld", numSections);
     return numSections;
 }
 
@@ -335,42 +355,19 @@ NSString * const kTFDataSourceModeJoin = @"join";
             continue;
         }
         
+        NSInteger rows = NSNotFound;
         if ([ds conformsToProtocol:@protocol(UITableViewDataSource)]){
-            return [ds tableView:view numberOfRowsInSection:section-previousSections];
+            rows = [ds tableView:view numberOfRowsInSection:section-previousSections];
         }
         if ([ds conformsToProtocol:@protocol(UICollectionViewDataSource)]) {
-            return [ds collectionView:view numberOfItemsInSection:section-previousSections];
+            rows = [ds collectionView:view numberOfItemsInSection:section-previousSections];
         }
+        NSLog(@"[i] Rows count: %ld in section: %ld", rows, section);
+        return rows;
     }
     
     NSAssert(NO, @"Should never happen");
     return 0;
-}
-
-- (id)view:(id)view cellAtIndexPath:(NSIndexPath *)indexPath
-{
-    NSInteger previousSections = 0;
-    for (id<UITableViewDataSource, UICollectionViewDataSource> ds in self.dataSources) {
-        NSInteger sections = 1;
-        if ([ds respondsToSelector:@selector(numberOfSectionsInTableView:)]) sections = [ds numberOfSectionsInTableView:view];
-        if ([ds respondsToSelector:@selector(numberOfSectionsInCollectionView:)]) sections = [ds numberOfSectionsInCollectionView:view];
-        
-        if (indexPath.section >= previousSections + sections)  {
-            previousSections += sections;
-            continue;
-        }
-        
-        NSIndexPath * shiftedIndexPath = [NSIndexPath indexPathForRow:indexPath.row inSection:indexPath.section-previousSections];
-        if ([ds conformsToProtocol:@protocol(UITableViewDataSource)]){
-            return [ds tableView:view cellForRowAtIndexPath:shiftedIndexPath];
-        }
-        if ([ds conformsToProtocol:@protocol(UICollectionViewDataSource)]) {
-            return [ds collectionView:view cellForItemAtIndexPath:shiftedIndexPath];
-        }
-    }
-    
-    NSAssert(NO, @"Should never happen");
-    return nil;
 }
 
 @end
