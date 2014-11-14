@@ -27,4 +27,9 @@
     cell.textLabel.text = @"Single entry first cell";
 }
 
+- (NSString *)itemAtIndexPath:(NSIndexPath *)indexPath
+{
+    return @"Single entry first cell";
+}
+
 @end

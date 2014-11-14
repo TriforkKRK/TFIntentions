@@ -9,5 +9,5 @@
 #import "TFOwnerableObject.h"
 
 @interface TFSingleEntryDataSource : NSObject<UITableViewDataSource>
-
+- (NSString *)itemAtIndexPath:(NSIndexPath *)indexPath;
 @end

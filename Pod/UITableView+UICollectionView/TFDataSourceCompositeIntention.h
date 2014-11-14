@@ -25,6 +25,8 @@
 
 @protocol TFDataSourceComposing <UITableViewDataSource, UICollectionViewDataSource>
 @property (strong, nonatomic) NSArray * dataSources;
+
+- (id<UITableViewDataSource, UICollectionViewDataSource>)dataSourceAtIndexPath:(NSIndexPath *)indexPath view:(id)view outIndexPath:(out NSIndexPath **)outIndexPath;
 @end
 
 
@@ -38,4 +40,5 @@ IB_DESIGNABLE
 @property (strong, nonatomic) IBOutletCollection(id) NSArray * dataSources;
 @property (strong, nonatomic) IBInspectable NSString * mode;    // @see kTFDataSourceModeMerge (default), kTFDataSourceModeJoin
 
+- (id)itemAtIndexPath:(NSIndexPath *)indexPath; // supported as long as all underlying @see dataSources implement this method, it will pass nil as tableView / collectionView when talking to datasources
 @end

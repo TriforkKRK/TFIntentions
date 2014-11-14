@@ -7,8 +7,17 @@
 //
 
 #import "TFSimpleDelegate.h"
+#import "TFTableViewDataSource.h"
+#import <TFIntentions/TFDataSourceCompositeIntention.h>
 
 @implementation TFSimpleDelegate
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    id model = [(TFDataSourceCompositeIntention *)tableView.dataSource itemAtIndexPath:indexPath];
+    NSLog(@"selected %@", model);
+}
+
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     return 50;

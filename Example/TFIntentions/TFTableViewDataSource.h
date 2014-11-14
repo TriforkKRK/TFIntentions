@@ -11,4 +11,6 @@
 
 @interface TFTableViewDataSource : NSObject <UITableViewDataSource, TFUITableViewCellConfiguring>
 @property (nonatomic, weak) IBOutlet UITableView * tableView;
+
+- (NSString *)itemAtIndexPath:(NSIndexPath *)indexPath;
 @end

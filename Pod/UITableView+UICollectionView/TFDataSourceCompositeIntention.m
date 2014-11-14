@@ -45,6 +45,19 @@ NSString * const kTFDataSourceModeJoin = @"join";
 
 @implementation TFDataSourceCompositeIntention
 
+- (id)itemAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSIndexPath * outIndexPath = nil;
+    id ds = [self dataSourceAtIndexPath:indexPath view:nil outIndexPath:&outIndexPath];
+    SEL sel = @selector(itemAtIndexPath:);
+    if ([ds respondsToSelector:sel] == NO) {
+        [NSException raise:NSInternalInconsistencyException format:@"Underlying dataSource: %@ doesn't implement %@", ds, NSStringFromSelector(sel)];
+        return nil;
+    }
+    
+    return [ds itemAtIndexPath:outIndexPath];
+}
+
 #pragma mark - Interface Methods
 
 - (void)setMode:(NSString *)mode
@@ -126,6 +139,36 @@ NSString * const kTFDataSourceModeJoin = @"join";
 
 @implementation TFCompositeDataSourceMergeSectionsImpl
 
+- (id<UITableViewDataSource, UICollectionViewDataSource>)dataSourceAtIndexPath:(NSIndexPath *)indexPath view:(id)view outIndexPath:(out NSIndexPath *__autoreleasing *)outIndexPath
+{
+#warning TODO
+    // param assert ds protocol + view type
+    NSInteger previousObjectsCount = 0;
+    for (id<UITableViewDataSource, UICollectionViewDataSource> ds in self.dataSources) {
+        NSInteger rows = 0;
+        if ([ds conformsToProtocol:@protocol(UITableViewDataSource)]) {
+            rows = [ds tableView:view numberOfRowsInSection:indexPath.section];
+        }
+        if ([ds conformsToProtocol:@protocol(UICollectionViewDataSource)]) {
+            rows = [ds collectionView:view numberOfItemsInSection:indexPath.section];
+        }
+        
+        if (indexPath.row < previousObjectsCount + rows) {
+            NSIndexPath * shiftedIndexPath = [NSIndexPath indexPathForRow:indexPath.row-previousObjectsCount inSection:indexPath.section];
+            if (outIndexPath != NULL) {
+                *outIndexPath = shiftedIndexPath;
+            }
+            return ds;
+        }
+        
+        previousObjectsCount += rows;
+    }
+    
+#warning - what about this assertion here?
+    NSAssert(NO, @"Data source not found!!!, this should never happen!");
+    return nil;
+}
+
 #pragma mark - UITableViewDataSource
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -204,30 +247,18 @@ NSString * const kTFDataSourceModeJoin = @"join";
 
 - (id)view:(id)view cellAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSInteger previousObjectsCount = 0;
-    for (id<UITableViewDataSource, UICollectionViewDataSource> ds in self.dataSources) {
-        NSInteger rows = 0;
-        if ([ds conformsToProtocol:@protocol(UITableViewDataSource)]) {
-            rows = [ds tableView:view numberOfRowsInSection:indexPath.section];
-        }
-        if ([ds conformsToProtocol:@protocol(UICollectionViewDataSource)]) {
-            rows = [ds collectionView:view numberOfItemsInSection:indexPath.section];
-        }
-        
-        if (indexPath.row < previousObjectsCount + rows) {
-            NSIndexPath * shiftedIndexPath = [NSIndexPath indexPathForRow:indexPath.row-previousObjectsCount inSection:indexPath.section];
-            if ([ds conformsToProtocol:@protocol(UITableViewDataSource)]) {
-                return [ds tableView:view cellForRowAtIndexPath:shiftedIndexPath];
-            }
-            if ([ds conformsToProtocol:@protocol(UICollectionViewDataSource)]) {
-                return [ds collectionView:view cellForItemAtIndexPath:shiftedIndexPath];
-            }
-        }
-        
-        previousObjectsCount += rows;
+    NSIndexPath * shiftedIndexPath = nil;
+    id ds = [self dataSourceAtIndexPath:indexPath view:view outIndexPath:&shiftedIndexPath];
+    NSAssert(ds != nil && shiftedIndexPath != nil, @"Underlying data source nor indexPath can't be unknown at this point");
+    
+    if ([ds conformsToProtocol:@protocol(UITableViewDataSource)]) {
+        return [ds tableView:view cellForRowAtIndexPath:shiftedIndexPath];
+    }
+    if ([ds conformsToProtocol:@protocol(UICollectionViewDataSource)]) {
+        return [ds collectionView:view cellForItemAtIndexPath:shiftedIndexPath];
     }
     
-    NSAssert(NO, @"Data source not found!!!, this should never happen!");
+    NSAssert(NO, @"Data source has to be either UITableViewDataSource or UICollectionViewDataSource");
     return nil;
 }
 
