@@ -22,9 +22,10 @@
  */
 
 #import "TFDataSourceCompositeIntention.h"
+#import <objc/runtime.h>
 
 NSString * const kTFDataSourceModeMerge = @"merge";
-NSString * const kTFDataSourceModeJoin = @"join";
+NSString * const kTFDataSourceModeChain = @"chain";
 
 @interface TFDataSourceCompositeIntention()
 @property (nonatomic, strong) NSObject<TFDataSourceComposing> *implementation;
@@ -35,7 +36,7 @@ NSString * const kTFDataSourceModeJoin = @"join";
 @property (strong, nonatomic) NSArray * dataSources;
 @end
 
-@interface TFCompositeDataSourceJoinSectionsImpl : NSObject<TFDataSourceComposing>
+@interface TFCompositeDataSourceChainSectionsImpl : NSObject<TFDataSourceComposing>
 @property (strong, nonatomic) NSArray * dataSources;
 @end
 
@@ -49,7 +50,7 @@ NSString * const kTFDataSourceModeJoin = @"join";
 
 - (void)setMode:(NSString *)mode
 {
-    NSParameterAssert([mode isEqualToString:kTFDataSourceModeMerge] || [mode isEqualToString:kTFDataSourceModeJoin]);
+    NSParameterAssert([mode isEqualToString:kTFDataSourceModeMerge] || [mode isEqualToString:kTFDataSourceModeChain]);
     
     if (mode == _mode) return;
 
@@ -61,8 +62,17 @@ NSString * const kTFDataSourceModeJoin = @"join";
 {
     if (dataSources == _dataSources) return;
     
+    for (NSObject * ds in dataSources) {
+        [ds setCompositionDelegate:self];
+    }
     _dataSources = dataSources;
     _implementation.dataSources = dataSources;
+}
+
+- (void)setNeedsReload:(id)dataSource
+{
+    // TODO: be more clever and reload only dataSource not the whole tableView
+    [self.tableView reloadData];
 }
 
 - (id)itemAtIndexPath:(NSIndexPath *)indexPath
@@ -132,11 +142,73 @@ NSString * const kTFDataSourceModeJoin = @"join";
     return [self view:collectionView cellAtIndexPath:indexPath];
 }
 
+#pragma mark - UITableViewDelegate - Cell Height
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSIndexPath * shiftedIndexPath = nil;
+    id ds = [self.implementation dataSourceAtIndexPath:indexPath view:tableView outIndexPath:&shiftedIndexPath];
+    NSAssert(ds != nil && shiftedIndexPath != nil, @"Underlying data source nor indexPath can't be unknown at this point");
+    
+    NSAssert([ds respondsToSelector:@selector(tableView:heightForRowAtIndexPath:)], @"Whenever CompositeDataSource is set as tableView.delegate it will handle cell heights, but for this feature to work, all the child datasources need to implement this method");
+        
+    return [ds tableView:tableView heightForRowAtIndexPath:shiftedIndexPath];
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    NSIndexPath * shiftedIndexPath = nil;
+    id ds = [self.implementation dataSourceAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:section] view:tableView outIndexPath:&shiftedIndexPath];
+    NSAssert(ds != nil && shiftedIndexPath != nil, @"Underlying data source nor indexPath can't be unknown at this point");
+    
+    if (![ds respondsToSelector:@selector(tableView:viewForHeaderInSection:)]) {
+        if (![ds respondsToSelector:@selector(tableView:titleForHeaderInSection:)]) {
+            return nil; // no header
+        }
+        
+        UITableViewHeaderFooterView * view = [[UITableViewHeaderFooterView alloc] init];  // try a default header
+        view.textLabel.text = [ds tableView:tableView titleForHeaderInSection:section];
+        return view;
+    }
+    
+    return [ds tableView:tableView viewForHeaderInSection:shiftedIndexPath.section];
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    NSIndexPath * shiftedIndexPath = nil;
+    id ds = [self.implementation dataSourceAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:section] view:tableView outIndexPath:&shiftedIndexPath];
+    NSAssert(ds != nil && shiftedIndexPath != nil, @"Underlying data source nor indexPath can't be unknown at this point");
+    
+    if (![ds respondsToSelector:@selector(tableView:viewForHeaderInSection:)]) {
+        if (![ds respondsToSelector:@selector(tableView:titleForHeaderInSection:)]) {
+            return CGFLOAT_MIN; // no header
+        }
+        
+        return 20.0f; // default height
+    }
+    
+    return [ds tableView:tableView heightForHeaderInSection:shiftedIndexPath.section];
+}
+
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSIndexPath * shiftedIndexPath = nil;
+    id ds = [self.implementation dataSourceAtIndexPath:indexPath view:tableView outIndexPath:&shiftedIndexPath];
+    NSAssert(ds != nil && shiftedIndexPath != nil, @"Underlying data source nor indexPath can't be unknown at this point");
+    
+    if (![ds respondsToSelector:@selector(tableView:willDisplayCell:forRowAtIndexPath:)]) {
+        return;
+    }
+    
+    [ds tableView:tableView willDisplayCell:cell forRowAtIndexPath:shiftedIndexPath];
+}
+
 #pragma mark - Private Methods
 
 - (id<TFDataSourceComposing>)createImplementationForMode:(NSString *)mode
 {
-    Class implClass = [mode isEqualToString:kTFDataSourceModeMerge] ? TFCompositeDataSourceMergeSectionsImpl.class : TFCompositeDataSourceJoinSectionsImpl.class;
+    Class implClass = [mode isEqualToString:kTFDataSourceModeMerge] ? TFCompositeDataSourceMergeSectionsImpl.class : TFCompositeDataSourceChainSectionsImpl.class;
     
     NSObject<TFDataSourceComposing> * impl = [[implClass alloc] init];
     impl.dataSources = self.dataSources;
@@ -268,9 +340,25 @@ NSString * const kTFDataSourceModeJoin = @"join";
 @end
 
 
-@implementation TFCompositeDataSourceJoinSectionsImpl
+@implementation TFCompositeDataSourceChainSectionsImpl
 
 #pragma mark TFDataSourceComposing
+
+- (NSInteger)numberOfSectionsBeforeDataSource:(id)dataSource inView:(id)view
+{
+    NSInteger previousSections = 0;
+    for (id<UITableViewDataSource, UICollectionViewDataSource> ds in self.dataSources) {
+        if (ds == dataSource) break;
+        
+        NSInteger sections = 1;
+        if ([ds respondsToSelector:@selector(numberOfSectionsInTableView:)]) sections = [ds numberOfSectionsInTableView:view];
+        if ([ds respondsToSelector:@selector(numberOfSectionsInCollectionView:)]) sections = [ds numberOfSectionsInCollectionView:view];
+        
+        previousSections += sections;
+    }
+    
+    return previousSections;
+}
 
 - (id<UITableViewDataSource, UICollectionViewDataSource>)dataSourceAtIndexPath:(NSIndexPath *)indexPath view:(id)view outIndexPath:(out NSIndexPath *__autoreleasing *)outIndexPath
 {
@@ -309,6 +397,31 @@ NSString * const kTFDataSourceModeJoin = @"join";
 {
     return [self view:tableView numberOfRowsInSection:section];
 }
+
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+    NSInteger previousSections = 0;
+    for (id<UITableViewDataSource, UICollectionViewDataSource> ds in self.dataSources) {
+        NSInteger sections = 1;
+        if ([ds respondsToSelector:@selector(numberOfSectionsInTableView:)]) sections = [ds numberOfSectionsInTableView:tableView];
+        
+        if (section >= previousSections + sections)  {
+            previousSections += sections;
+            continue;
+        }
+        
+        NSString * title = nil;
+        if ([ds respondsToSelector:@selector(tableView:titleForHeaderInSection:)]) {
+            title = [ds tableView:tableView titleForHeaderInSection:section-previousSections];
+        }
+        
+        return title;
+    }
+    
+    NSAssert(NO, @"Should never happen");
+    return nil;
+}
+
 
 #pragma mark - UICollectionViewDataSource
 
@@ -370,4 +483,23 @@ NSString * const kTFDataSourceModeJoin = @"join";
 }
 
 @end
+
+
+
+@implementation NSObject (TFDataSourceComposing)
+
+static void * compositionDelegateKey = &compositionDelegateKey;
+
+- (void)setCompositionDelegate:(id<TFDataSourceComposing>)compositionDelegate
+{
+    objc_setAssociatedObject(self, compositionDelegateKey, compositionDelegate, OBJC_ASSOCIATION_ASSIGN);
+}
+
+- (id<TFDataSourceComposing>)compositionDelegate
+{
+    return objc_getAssociatedObject(self, compositionDelegateKey);
+}
+
+@end
+
 

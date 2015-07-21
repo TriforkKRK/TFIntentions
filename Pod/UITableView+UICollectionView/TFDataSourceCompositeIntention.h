@@ -27,21 +27,29 @@
 @property (strong, nonatomic) NSArray * dataSources;
 
 - (id<UITableViewDataSource, UICollectionViewDataSource>)dataSourceAtIndexPath:(NSIndexPath *)indexPath view:(id)view outIndexPath:(out NSIndexPath **)outIndexPath;
+- (NSInteger)numberOfSectionsBeforeDataSource:(id)dataSource inView:(id)view;
+- (void)setNeedsReload:(id)dataSource;
 @end
 
 
+@protocol TFComposableDataSource <UITableViewDataSource, UICollectionViewDataSource>
+
+@optional   // UITableViewDataSource methods responsible for cell height calculations, if implemented all child datasources need to implement that
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath;
+
+@end
 
 NSString * const kTFDataSourceModeMerge; // =  @"merge"
-NSString * const kTFDataSourceModeJoin;  // =  @"join"
+NSString * const kTFDataSourceModeChain;  // =  @"chain"
 
 IB_DESIGNABLE
 @interface TFDataSourceCompositeIntention : TFIntention<TFDataSourceComposing>
-
+@property (weak, nonatomic) IBOutlet UITableView * tableView;
 /**
  * Underlying dataSources must use dequeueReusableCellWithIdentifier:kCellIdentifier instead of dequeueReusableCellWithIdentifier:forIndexPath:
  * the later one may cause crash as the indexPath passed is sometimes different on the data source comparing to the tableView.
  */
-@property (strong, nonatomic) IBOutletCollection(id) NSArray * dataSources;
+@property (strong, nonatomic) IBOutletCollection(id) NSArray * dataSources; // should be a list of TFComposableDataSource
 @property (strong, nonatomic) IBInspectable NSString * mode;    // @see kTFDataSourceModeMerge (default), kTFDataSourceModeJoin
 
 /**
@@ -50,4 +58,9 @@ IB_DESIGNABLE
  */
 - (id)itemAtIndexPath:(NSIndexPath *)indexPath;
 
+@end
+
+
+@interface NSObject (TFDataSourceComposing)
+@property (nonatomic, weak) id<TFDataSourceComposing> compositionDelegate;
 @end
