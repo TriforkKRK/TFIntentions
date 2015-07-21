@@ -23,44 +23,45 @@
 
 #import "TFIntention.h"
 
-@protocol TFDataSourceComposing <UITableViewDataSource, UICollectionViewDataSource>
-@property (strong, nonatomic) NSArray * dataSources;
-
-- (id<UITableViewDataSource, UICollectionViewDataSource>)dataSourceAtIndexPath:(NSIndexPath *)indexPath view:(id)view outIndexPath:(out NSIndexPath **)outIndexPath;
-- (NSInteger)numberOfSectionsBeforeDataSource:(id)dataSource inView:(id)view;
-- (void)setNeedsReload:(id)dataSource;
-@end
-
-
-@protocol TFComposableDataSource <UITableViewDataSource, UICollectionViewDataSource>
-
-@optional   // UITableViewDataSource methods responsible for cell height calculations, if implemented all child datasources need to implement that
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath;
-
-@end
-
-NSString * const kTFDataSourceModeMerge; // =  @"merge"
-NSString * const kTFDataSourceModeChain;  // =  @"chain"
-
-IB_DESIGNABLE
-@interface TFDataSourceCompositeIntention : TFIntention<TFDataSourceComposing>
-@property (weak, nonatomic) IBOutlet UITableView * tableView;
+@protocol TFDataSourceComposing <UITableViewDataSource, UITableViewDelegate, UICollectionViewDataSource, UICollectionViewDelegate>
+@required
 /**
  * Underlying dataSources must use dequeueReusableCellWithIdentifier:kCellIdentifier instead of dequeueReusableCellWithIdentifier:forIndexPath:
  * the later one may cause crash as the indexPath passed is sometimes different on the data source comparing to the tableView.
  */
-@property (strong, nonatomic) IBOutletCollection(id) NSArray * dataSources; // should be a list of TFComposableDataSource
-@property (strong, nonatomic) IBInspectable NSString * mode;    // @see kTFDataSourceModeMerge (default), kTFDataSourceModeJoin
+@property (strong, nonatomic) NSArray * dataSources;
 
+// TODO: this shouldnt' be really exposed, maybe just for subclassing
+- (id<UITableViewDataSource, UICollectionViewDataSource>)dataSourceAtIndexPath:(NSIndexPath *)indexPath view:(id)view outIndexPath:(out NSIndexPath **)outIndexPath;
+- (NSInteger)numberOfSectionsBeforeDataSource:(id)dataSource inView:(id)view;
+
+@optional
 /**
  *  This method is supported as long as all underlying @see dataSources also implement it
  *  IMPORTANT: it will pass nil as tableView / collectionView when talking to dataSources
  */
 - (id)itemAtIndexPath:(NSIndexPath *)indexPath;
-
 @end
 
 
+
+/**
+ *  Declaration of an interface that is used as a type for the datasources @see TFDataSourceCompositeIntention is composing.
+ *  It has to implement all @required methods from datasources, and it can also implement delegation methods
+ *  There are certain scenarios that require all the underlying elements to implement a method (like heightForRowAtIndexPath) or none.
+ */
+@protocol TFComposableDataSource <UITableViewDataSource, UITableViewDelegate, UICollectionViewDataSource, UICollectionViewDelegate>
+@end
+
+
+
+@interface TFDataSourceCompositeIntention : TFIntention<TFDataSourceComposing>
+@property (weak, nonatomic) IBOutlet UITableView * tableView;
+@property (strong, nonatomic) IBOutletCollection(id) NSArray * dataSources; // should be a list of TFComposableDataSource
+@end
+
+
+
 @interface NSObject (TFDataSourceComposing)
-@property (nonatomic, weak) id<TFDataSourceComposing> compositionDelegate;
+@property (nonatomic, weak) TFDataSourceCompositeIntention * compositionDelegate;
 @end
