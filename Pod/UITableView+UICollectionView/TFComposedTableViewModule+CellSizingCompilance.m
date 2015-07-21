@@ -21,14 +21,14 @@
  * THE SOFTWARE.
  */
 
-#import "TFDataSourceCompositeIntention+CellSizingCompilance.h"
+#import "TFComposedTableViewModule+CellSizingCompilance.h"
 
-@implementation TFDataSourceCompositeIntention (CellSizingCompilance)
+@implementation TFComposedTableViewModule (CellSizingCompilance)
 
 - (void)configureCell:(id)cell atIndexPath:(NSIndexPath *)indexPath
 {
     NSIndexPath * outIndexPath = nil;
-    id ds = [self dataSourceAtIndexPath:indexPath view:nil outIndexPath:&outIndexPath];
+    id ds = [self submoduleAtIndexPath:indexPath view:nil outIndexPath:&outIndexPath];
     NSParameterAssert([ds conformsToProtocol:@protocol(TFUITableViewCellConfiguring)]);
     
     [ds configureCell:cell atIndexPath:outIndexPath];
@@ -37,7 +37,7 @@
 - (NSString *)reuseIdentifierAtIndexPath:(NSIndexPath *)indexPath
 {
     NSIndexPath * outIndexPath = nil;
-    id ds = [self dataSourceAtIndexPath:indexPath view:nil outIndexPath:&outIndexPath];
+    id ds = [self submoduleAtIndexPath:indexPath view:nil outIndexPath:&outIndexPath];
     NSParameterAssert([ds conformsToProtocol:@protocol(TFUITableViewCellConfiguring)]);
     
     return [ds reuseIdentifierAtIndexPath:outIndexPath];

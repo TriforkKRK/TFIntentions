@@ -154,10 +154,10 @@
                         <outlet property="tableView" destination="I88-cK-cdh" id="fhe-3n-wt0"/>
                     </connections>
                 </customObject>
-                <customObject id="WqT-QQ-jsF" customClass="TFDataSourceCompositeIntention">
+                <customObject id="WqT-QQ-jsF" customClass="TFComposedTableViewModule">
                     <connections>
-                        <outletCollection property="dataSources" destination="yv3-Q8-z34" id="9Oq-7O-Hmm"/>
-                        <outletCollection property="dataSources" destination="Me4-Jw-lSV" id="1Wn-lq-81M"/>
+                        <outletCollection property="submodules" destination="Me4-Jw-lSV" id="kWx-hk-jCT"/>
+                        <outletCollection property="submodules" destination="yv3-Q8-z34" id="Ta4-D5-rP8"/>
                     </connections>
                 </customObject>
                 <customObject id="9cN-LO-dig" customClass="TFUITableViewDelegateCellSizingIntention">

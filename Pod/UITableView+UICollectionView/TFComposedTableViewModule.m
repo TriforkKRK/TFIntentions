@@ -21,32 +21,32 @@
  * THE SOFTWARE.
  */
 
-#import "TFDataSourceCompositeIntention.h"
+#import "TFComposedTableViewModule.h"
 #import <objc/runtime.h>
 
 
 #pragma clang push
 #pragma clang diagnostic ignored "-Wprotocol"
 
-@implementation TFDataSourceCompositeIntention
+@implementation TFComposedTableViewModule
 
 #pragma mark - Interface Methods
 
-- (void)setDataSources:(NSArray *)dataSources
+- (void)setSubmodules:(NSArray *)submodules
 {
-    if (dataSources == _dataSources) return;
+    if (submodules == _submodules) return;
     
-    for (NSObject * ds in dataSources) {
+    for (NSObject * ds in submodules) {
         [ds setCompositionDelegate:self];
     }
-    _dataSources = dataSources;
+    _submodules = submodules;
 }
 #pragma mark TFDataSourceComposing
 
 - (NSInteger)numberOfSectionsBeforeDataSource:(id)dataSource inView:(id)view
 {
     NSInteger previousSections = 0;
-    for (id<UITableViewDataSource, UICollectionViewDataSource> ds in self.dataSources) {
+    for (id<UITableViewDataSource, UICollectionViewDataSource> ds in self.submodules) {
         if (ds == dataSource) break;
         
         NSInteger sections = 1;
@@ -59,15 +59,14 @@
     return previousSections;
 }
 
-- (id<UITableViewDataSource, UICollectionViewDataSource>)dataSourceAtIndexPath:(NSIndexPath *)indexPath view:(id)view outIndexPath:(out NSIndexPath *__autoreleasing *)outIndexPath
+- (id<TFTableViewModule>)submoduleAtIndexPath:(NSIndexPath *)indexPath view:(id)view outIndexPath:(out NSIndexPath *__autoreleasing *)outIndexPath
 {
     NSParameterAssert(view == nil || [view isKindOfClass:UITableView.class] || [view isKindOfClass:UICollectionView.class]);
     
     NSInteger previousSections = 0;
-    for (id<UITableViewDataSource, UICollectionViewDataSource> ds in self.dataSources) {
+    for (id<TFTableViewModule> module in self.submodules) {
         NSInteger sections = 1;
-        if ([ds respondsToSelector:@selector(numberOfSectionsInTableView:)]) sections = [ds numberOfSectionsInTableView:view];
-        if ([ds respondsToSelector:@selector(numberOfSectionsInCollectionView:)]) sections = [ds numberOfSectionsInCollectionView:view];
+        if ([module respondsToSelector:@selector(numberOfSectionsInTableView:)]) sections = [module numberOfSectionsInTableView:view];
         
         if (indexPath.section >= previousSections + sections)  {
             previousSections += sections;
@@ -78,10 +77,10 @@
         if (outIndexPath != NULL) {
             *outIndexPath = shiftedIndexPath;
         }
-        return ds;
+        return module;
     }
     
-    [NSException raise:NSInternalInconsistencyException format:@"Invalid indexPath: %@, can't locate underlying dataSource", indexPath];
+    [NSException raise:NSInternalInconsistencyException format:@"Invalid indexPath: %@, can't locate underlying module", indexPath];
     return nil;
 }
 
@@ -89,7 +88,7 @@
 {
     NSIndexPath * outIndexPath = nil;
 #warning nil?
-    id ds = [self dataSourceAtIndexPath:indexPath view:nil outIndexPath:&outIndexPath];
+    id ds = [self submoduleAtIndexPath:indexPath view:nil outIndexPath:&outIndexPath];
     SEL sel = @selector(itemAtIndexPath:);
     if ([ds respondsToSelector:sel] == NO) {
         [NSException raise:NSInternalInconsistencyException format:@"Underlying dataSource: %@ doesn't implement %@", ds, NSStringFromSelector(sel)];
@@ -123,7 +122,7 @@
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
     NSInteger previousSections = 0;
-    for (id<UITableViewDataSource, UICollectionViewDataSource> ds in self.dataSources) {
+    for (id<UITableViewDataSource, UICollectionViewDataSource> ds in self.submodules) {
         NSInteger sections = 1;
         if ([ds respondsToSelector:@selector(numberOfSectionsInTableView:)]) sections = [ds numberOfSectionsInTableView:tableView];
         
@@ -147,7 +146,7 @@
 - (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
 {
     NSInteger previousSections = 0;
-    for (id<UITableViewDataSource, UICollectionViewDataSource> ds in self.dataSources) {
+    for (id<UITableViewDataSource, UICollectionViewDataSource> ds in self.submodules) {
         NSInteger sections = 1;
         if ([ds respondsToSelector:@selector(numberOfSectionsInTableView:)]) sections = [ds numberOfSectionsInTableView:tableView];
         
@@ -174,7 +173,7 @@
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
     NSIndexPath * shiftedIndexPath = nil;
-    id ds = [self dataSourceAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:section] view:tableView outIndexPath:&shiftedIndexPath];
+    id ds = [self submoduleAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:section] view:tableView outIndexPath:&shiftedIndexPath];
     NSAssert(ds != nil && shiftedIndexPath != nil, @"Underlying data source nor indexPath can't be unknown at this point");
     
     if (![ds respondsToSelector:@selector(tableView:viewForHeaderInSection:)]) {
@@ -193,7 +192,7 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
     NSIndexPath * shiftedIndexPath = nil;
-    id ds = [self dataSourceAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:section] view:tableView outIndexPath:&shiftedIndexPath];
+    id ds = [self submoduleAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:section] view:tableView outIndexPath:&shiftedIndexPath];
     NSAssert(ds != nil && shiftedIndexPath != nil, @"Underlying data source nor indexPath can't be unknown at this point");
     
     if (![ds respondsToSelector:@selector(tableView:viewForHeaderInSection:)]) {
@@ -210,10 +209,10 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSIndexPath * shiftedIndexPath = nil;
-    id ds = [self dataSourceAtIndexPath:indexPath view:tableView outIndexPath:&shiftedIndexPath];
+    id ds = [self submoduleAtIndexPath:indexPath view:tableView outIndexPath:&shiftedIndexPath];
     NSAssert(ds != nil && shiftedIndexPath != nil, @"Underlying data source nor indexPath can't be unknown at this point");
     
-    NSAssert([ds respondsToSelector:@selector(tableView:heightForRowAtIndexPath:)], @"Whenever CompositeDataSource is set as tableView.delegate it will handle cell heights, but for this feature to work, all the child datasources need to implement this method");
+    NSAssert([ds respondsToSelector:@selector(tableView:heightForRowAtIndexPath:)], @"Whenever CompositeDataSource is set as tableView.delegate it will handle cell heights, but for this feature to work, all the child submodules need to implement this method");
     
     return [ds tableView:tableView heightForRowAtIndexPath:shiftedIndexPath];
 }
@@ -221,7 +220,7 @@
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSIndexPath * shiftedIndexPath = nil;
-    id ds = [self dataSourceAtIndexPath:indexPath view:tableView outIndexPath:&shiftedIndexPath];
+    id ds = [self submoduleAtIndexPath:indexPath view:tableView outIndexPath:&shiftedIndexPath];
     NSAssert(ds != nil && shiftedIndexPath != nil, @"Underlying data source nor indexPath can't be unknown at this point");
     
     if (![ds respondsToSelector:@selector(tableView:willDisplayCell:forRowAtIndexPath:)]) {
@@ -257,7 +256,7 @@
 - (id)view:(id)view cellAtIndexPath:(NSIndexPath *)indexPath
 {
     NSIndexPath * shiftedIndexPath = nil;
-    id ds = [self dataSourceAtIndexPath:indexPath view:view outIndexPath:&shiftedIndexPath];
+    id ds = [self submoduleAtIndexPath:indexPath view:view outIndexPath:&shiftedIndexPath];
     NSAssert(ds != nil && shiftedIndexPath != nil, @"Underlying data source nor indexPath can't be unknown at this point");
     
     if ([ds conformsToProtocol:@protocol(UITableViewDataSource)]) {
@@ -274,7 +273,7 @@
 - (NSInteger)numberOfSectionsInView:(id)view
 {
     NSInteger numSections = 0;
-    for (id<UITableViewDataSource, UICollectionViewDataSource> ds in self.dataSources) {
+    for (id<UITableViewDataSource, UICollectionViewDataSource> ds in self.submodules) {
         NSInteger sections = 1;
         if ([ds respondsToSelector:@selector(numberOfSectionsInTableView:)]) {
             sections = [ds numberOfSectionsInTableView:view];
@@ -291,7 +290,7 @@
 - (NSInteger)view:(id)view numberOfRowsInSection:(NSInteger)section
 {
     NSInteger previousSections = 0;
-    for (id<UITableViewDataSource, UICollectionViewDataSource> ds in self.dataSources) {
+    for (id<UITableViewDataSource, UICollectionViewDataSource> ds in self.submodules) {
         NSInteger sections = 1;
         if ([ds respondsToSelector:@selector(numberOfSectionsInTableView:)]) sections = [ds numberOfSectionsInTableView:view];
         if ([ds respondsToSelector:@selector(numberOfSectionsInCollectionView:)]) sections = [ds numberOfSectionsInCollectionView:view];
@@ -326,12 +325,12 @@
 
 static void * compositionDelegateKey = &compositionDelegateKey;
 
-- (void)setCompositionDelegate:(TFDataSourceCompositeIntention *)compositionDelegate
+- (void)setCompositionDelegate:(TFComposedTableViewModule *)compositionDelegate
 {
     objc_setAssociatedObject(self, compositionDelegateKey, compositionDelegate, OBJC_ASSOCIATION_ASSIGN);
 }
 
-- (TFDataSourceCompositeIntention *)compositionDelegate
+- (TFComposedTableViewModule *)compositionDelegate
 {
     return objc_getAssociatedObject(self, compositionDelegateKey);
 }

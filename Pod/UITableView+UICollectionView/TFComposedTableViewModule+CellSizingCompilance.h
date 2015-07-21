@@ -21,9 +21,9 @@
  * THE SOFTWARE.
  */
 
-#import "TFDataSourceCompositeIntention.h"
+#import "TFComposedTableViewModule.h"
 #import "TFUITableViewDelegateCellSizingIntention.h"
 
-@interface TFDataSourceCompositeIntention (CellSizingCompilance)<TFUITableViewCellConfiguring>
+@interface TFComposedTableViewModule (CellSizingCompilance)<TFUITableViewCellConfiguring>
 
 @end
