@@ -28,7 +28,7 @@
 - (void)configureCell:(id)cell atIndexPath:(NSIndexPath *)indexPath
 {
     NSIndexPath * outIndexPath = nil;
-    id ds = [self submoduleAtIndexPath:indexPath view:nil outIndexPath:&outIndexPath];
+    id ds = [self submoduleAtIndexPath:indexPath tableView:nil outIndexPath:&outIndexPath];
     NSParameterAssert([ds conformsToProtocol:@protocol(TFUITableViewCellConfiguring)]);
     
     [ds configureCell:cell atIndexPath:outIndexPath];
@@ -37,7 +37,7 @@
 - (NSString *)reuseIdentifierAtIndexPath:(NSIndexPath *)indexPath
 {
     NSIndexPath * outIndexPath = nil;
-    id ds = [self submoduleAtIndexPath:indexPath view:nil outIndexPath:&outIndexPath];
+    id ds = [self submoduleAtIndexPath:indexPath tableView:nil outIndexPath:&outIndexPath];
     NSParameterAssert([ds conformsToProtocol:@protocol(TFUITableViewCellConfiguring)]);
     
     return [ds reuseIdentifierAtIndexPath:outIndexPath];

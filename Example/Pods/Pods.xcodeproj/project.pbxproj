@@ -757,6 +757,7 @@
 		AAA293948D1B7E5F758A8346 /* MKTIntReturnSetter.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = MKTIntReturnSetter.h; path = Source/OCMockito/Helpers/ReturnValueSetters/MKTIntReturnSetter.h; sourceTree = "<group>"; };
 		ABA358AFE4594FB604040CFA /* SPTCompiledExample.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SPTCompiledExample.m; path = Specta/Specta/SPTCompiledExample.m; sourceTree = "<group>"; };
 		AF4F61A33B8AEE0F3395467C /* XCTestCase+Specta.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "XCTestCase+Specta.m"; path = "Specta/Specta/XCTestCase+Specta.m"; sourceTree = "<group>"; };
+		AFD57A181B5EFF43004574B3 /* TFTableViewModuleComposing.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TFTableViewModuleComposing.h; sourceTree = "<group>"; };
 		B0705CCC63B44A487BEE88D8 /* MKTLongLongArgumentGetter.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = MKTLongLongArgumentGetter.h; path = Source/OCMockito/Helpers/ArgumentGetters/MKTLongLongArgumentGetter.h; sourceTree = "<group>"; };
 		B154A37AF968759C4B234F2A /* HCIsInstanceOf.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = HCIsInstanceOf.m; path = Source/Library/Object/HCIsInstanceOf.m; sourceTree = "<group>"; };
 		B32D73B9C35D3488C0BC07A9 /* HCStringContains.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = HCStringContains.m; path = Source/Library/Text/HCStringContains.m; sourceTree = "<group>"; };
@@ -1465,6 +1466,7 @@
 		AF42863F59A9B4972668CC54 /* UITableView+UICollectionView */ = {
 			isa = PBXGroup;
 			children = (
+				AFD57A181B5EFF43004574B3 /* TFTableViewModuleComposing.h */,
 				4CA5417D5C0248A537CEDE66 /* TFComposedTableViewModule.h */,
 				074243FABA1D39C243A91B57 /* TFComposedTableViewModule.m */,
 				B8BB4FB01AF838BCFE4D661C /* TFComposedTableViewModule+CellSizingCompilance.h */,

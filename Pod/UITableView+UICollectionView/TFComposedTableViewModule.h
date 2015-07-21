@@ -22,48 +22,12 @@
  */
 
 #import "TFIntention.h"
+#import "TFTableViewModuleComposing.h"
 
 
 /**
- *  Declaration of an interface that is used as a type of the submodules @see in TFTableViewModuleComposing.
- *  It has to implement all @required methods from datasources, and it can also implement delegation methods
- *  There are certain scenarios that require all the underlying elements to implement a method (like heightForRowAtIndexPath) or none.
- *
- *  Important:
- *  @see dequeueReusableCellWithIdentifier:kCellIdentifier must be used instead of @see dequeueReusableCellWithIdentifier:forIndexPath:
- *  when implementing modules, the later method is not supported yet.
- */
-@protocol TFTableViewModule <UITableViewDataSource, UITableViewDelegate> @end
-@protocol TFCollectionViewModule <UICollectionViewDataSource, UICollectionViewDelegate> @end
-
-
-
-/**
- *  Declaration of protocol that is able to compose a set of @see TFTableViewModule objects.
- *  This protocol is also TFTableViewModule by its nature and may be used to as a module in another composition.
- */
-@protocol TFTableViewModuleComposing <TFTableViewModule>
-@required
-
-- (NSArray *)submodules;   /**< list of TFTableViewModule objects */
-
-#warning TODO: this shouldn't be really exposed, maybe just for subclassing purposes
-- (id<TFTableViewModule>)submoduleAtIndexPath:(NSIndexPath *)indexPath view:(id)view outIndexPath:(out NSIndexPath **)outIndexPath;
-- (NSInteger)numberOfSectionsBeforeDataSource:(id)dataSource inView:(id)view;
-
-// TODO this will have to go somewhere else, it's origin is around MVVM architecture
-@optional
-/**
- *  This method is supported as long as all underlying @see dataSources also implement it
- *  IMPORTANT: it will pass nil as tableView / collectionView when talking to dataSources
- */
-- (id)itemAtIndexPath:(NSIndexPath *)indexPath;
-@end
-
-
-
-/**
- *  It's a subclass of TFIntention in order to allow creating and configuring this object from IB
+ *  An implementation of @see TFTableViewModuleComposing. It's a subclass of @see TFIntention
+ *  which makes it possible to create and configure it directly from Inmterface Builder, both xib and storyboard.
  */
 @interface TFComposedTableViewModule : TFIntention<TFTableViewModuleComposing>
 @property (weak, nonatomic) IBOutlet UITableView * tableView;
@@ -72,8 +36,10 @@
 
 
 /**
- *  Extension that adds a relationship to parent in this composition pattern
+ *  Extension that adds a relationship to supermodule (opposite to "submodule) which is a @see TFComposedTableViewModule that composes this module.
+ *
+ *  TODO: When having better language possibilities this would be an extension on NSObject<TFTableViewModule>
  */
-@interface NSObject (TFComposedTableViewModule)
-@property (nonatomic, weak) TFComposedTableViewModule * compositionDelegate;
+@interface NSObject (TFTableViewModule)
+@property (nonatomic, weak) id<TFTableViewModuleComposing> supermodule;
 @end
