@@ -12,7 +12,7 @@
 #define MOCKITO_SHORTHAND
 #import <OCMockito/OCMockito.h>
 #import <UIKit/UIKit.h>
-#import <TFIntentions/TFDataSourceCompositeIntention.h>
+#import <TFIntentions/TFComposedTableViewModule.h>
 
 
 SpecBegin(TFUITableViewDataSourceComposite);

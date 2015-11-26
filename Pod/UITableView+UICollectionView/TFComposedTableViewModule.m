@@ -36,8 +36,8 @@
 {
     if (submodules == _submodules) return;
     
-    [submodules makeObjectsPerformSelector:@selector(setSupermodule:) withObject:self];
     _submodules = submodules;
+    [_submodules makeObjectsPerformSelector:@selector(setSupermodule:) withObject:self];
 }
 
 #pragma mark TFDataSourceComposing
@@ -86,8 +86,7 @@
 - (id)itemAtIndexPath:(NSIndexPath *)indexPath
 {
     NSIndexPath * outIndexPath = nil;
-#warning nil?
-    id ds = [self submoduleAtIndexPath:indexPath tableView:nil outIndexPath:&outIndexPath];
+    id ds = [self submoduleAtIndexPath:indexPath tableView:self.tableView outIndexPath:&outIndexPath];
     SEL sel = @selector(itemAtIndexPath:);
     if ([ds respondsToSelector:sel] == NO) {
         [NSException raise:NSInternalInconsistencyException format:@"Underlying dataSource: %@ doesn't implement %@", ds, NSStringFromSelector(sel)];
@@ -102,17 +101,46 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [self view:tableView numberOfRowsInSection:section];
+    NSInteger previousSections = 0;
+    for (id<UITableViewDataSource, UICollectionViewDataSource> ds in self.submodules) {
+        NSInteger sections = 1;
+        if ([ds respondsToSelector:@selector(numberOfSectionsInTableView:)]) sections = [ds numberOfSectionsInTableView:tableView];
+        
+        if (section >= previousSections + sections)  {
+            previousSections += sections;
+            continue;
+        }
+        
+        NSInteger rows = [ds tableView:tableView numberOfRowsInSection:section-previousSections];
+        
+        return rows;
+    }
+    
+    NSAssert(NO, @"Should never happen");
+    return 0;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return [self view:tableView cellAtIndexPath:indexPath];
+    NSIndexPath * shiftedIndexPath = nil;
+    id ds = [self submoduleAtIndexPath:indexPath tableView:tableView outIndexPath:&shiftedIndexPath];
+    NSAssert(ds != nil && shiftedIndexPath != nil, @"Underlying data source nor indexPath can't be unknown at this point");
+    
+    return [ds tableView:tableView cellForRowAtIndexPath:shiftedIndexPath];
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return [self numberOfSectionsInView:tableView];
+    NSInteger numSections = 0;
+    for (id<UITableViewDataSource, UICollectionViewDataSource> ds in self.submodules) {
+        NSInteger sections = 1;
+        if ([ds respondsToSelector:@selector(numberOfSectionsInTableView:)]) {
+            sections = [ds numberOfSectionsInTableView:tableView];
+        }
+        numSections += sections;
+    }
+    
+    return numSections;
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
@@ -202,6 +230,8 @@
     return [ds tableView:tableView heightForHeaderInSection:shiftedIndexPath.section];
 }
 
+// footers
+
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSIndexPath * shiftedIndexPath = nil;
@@ -224,91 +254,6 @@
     }
     
     [ds tableView:tableView willDisplayCell:cell forRowAtIndexPath:shiftedIndexPath];
-}
-
-
-
-
-#pragma mark - UICollectionViewDataSource
-
-- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
-{
-    return [self numberOfSectionsInView:collectionView];
-}
-
-- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
-{
-    return [self view:collectionView numberOfRowsInSection:section];
-}
-
-- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
-{
-    return [self view:collectionView cellAtIndexPath:indexPath];
-}
-
-
-#pragma mark - Private Methods
-
-- (id)view:(id)view cellAtIndexPath:(NSIndexPath *)indexPath
-{
-    NSIndexPath * shiftedIndexPath = nil;
-    id ds = [self submoduleAtIndexPath:indexPath tableView:view outIndexPath:&shiftedIndexPath];
-    NSAssert(ds != nil && shiftedIndexPath != nil, @"Underlying data source nor indexPath can't be unknown at this point");
-    
-    if ([ds conformsToProtocol:@protocol(UITableViewDataSource)]) {
-        return [ds tableView:view cellForRowAtIndexPath:shiftedIndexPath];
-    }
-    if ([ds conformsToProtocol:@protocol(UICollectionViewDataSource)]) {
-        return [ds collectionView:view cellForItemAtIndexPath:shiftedIndexPath];
-    }
-    
-    NSAssert(NO, @"Data source has to be either UITableViewDataSource or UICollectionViewDataSource");
-    return nil;
-}
-
-- (NSInteger)numberOfSectionsInView:(id)view
-{
-    NSInteger numSections = 0;
-    for (id<UITableViewDataSource, UICollectionViewDataSource> ds in self.submodules) {
-        NSInteger sections = 1;
-        if ([ds respondsToSelector:@selector(numberOfSectionsInTableView:)]) {
-            sections = [ds numberOfSectionsInTableView:view];
-        }
-        if ([ds respondsToSelector:@selector(numberOfSectionsInCollectionView:)]) {
-            sections = [ds numberOfSectionsInCollectionView:view];
-        }
-        numSections += sections;
-    }
-    
-    return numSections;
-}
-
-- (NSInteger)view:(id)view numberOfRowsInSection:(NSInteger)section
-{
-    NSInteger previousSections = 0;
-    for (id<UITableViewDataSource, UICollectionViewDataSource> ds in self.submodules) {
-        NSInteger sections = 1;
-        if ([ds respondsToSelector:@selector(numberOfSectionsInTableView:)]) sections = [ds numberOfSectionsInTableView:view];
-        if ([ds respondsToSelector:@selector(numberOfSectionsInCollectionView:)]) sections = [ds numberOfSectionsInCollectionView:view];
-        
-        if (section >= previousSections + sections)  {
-            previousSections += sections;
-            continue;
-        }
-        
-        NSInteger rows = NSNotFound;
-        if ([ds conformsToProtocol:@protocol(UITableViewDataSource)]){
-            rows = [ds tableView:view numberOfRowsInSection:section-previousSections];
-        }
-        if ([ds conformsToProtocol:@protocol(UICollectionViewDataSource)]) {
-            rows = [ds collectionView:view numberOfItemsInSection:section-previousSections];
-        }
-        
-        return rows;
-    }
-    
-    NSAssert(NO, @"Should never happen");
-    return 0;
 }
 
 @end

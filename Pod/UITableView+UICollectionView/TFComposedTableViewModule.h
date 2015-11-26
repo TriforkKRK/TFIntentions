@@ -28,10 +28,13 @@
 /**
  *  An implementation of @see TFTableViewModuleComposing. It's a subclass of @see TFIntention
  *  which makes it possible to create and configure it directly from Inmterface Builder, both xib and storyboard.
+ *
+ *  TODO:
+ *  Consider being a subclass of @see TFTargetMultiplexerIntention
  */
 @interface TFComposedTableViewModule : TFIntention<TFTableViewModuleComposing>
-@property (weak, nonatomic) IBOutlet UITableView * tableView;
-@property (strong, nonatomic) IBOutletCollection(id) NSArray * submodules;
+@property (nonatomic, weak) IBOutlet UITableView * tableView;
+@property (nonatomic, strong) IBOutletCollection(id) NSArray * submodules;
 @end
 
 
